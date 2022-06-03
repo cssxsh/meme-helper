@@ -8,7 +8,7 @@ public object MemeRegexConfig : MemeRegex, AutoSavePluginConfig ("regex") {
     override val serializersModule: SerializersModule = SerializersModule {
         contextual(RegexSerializer)
     }
-    override val random: Regex by value("表情包".toRegex())
+    override val random: Regex by value("随机表情包".toRegex())
     override val md5: Regex by value("""[0-9a-f]{32}""".toRegex())
 
     override val pornhub: Regex by value("""^#ph\s+(\S+)\s+(\S+)""".toRegex())
