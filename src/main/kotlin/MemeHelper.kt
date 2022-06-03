@@ -29,7 +29,7 @@ public object MemeHelper : SimpleListenerHost() {
                     ?: sender.id
                 val avatar = avatar(id = id)
 
-                petpet(avatar).toImageResource()
+                petpet(avatar).toImageResource(formatName = "gif")
                     .use { resource -> subject.uploadImage(resource = resource) }
             }
             regex.dear findingReply { result ->
