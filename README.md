@@ -22,43 +22,36 @@
 
 PornHub Login 生成
 
-示例: `#ph Git Hub`
+示例: `#ph Git Hub`  
+![pornhub](example/pornhub.png)
 
 ### PetPet
 
 摸摸头生成
 
-示例: `#pet @群主`, `#pet 123456`
+示例: `#pet @群主`, `#pet 123456`  
+![petpet](example/petpet.gif)
 
 ### Dear
 
 狂亲表情包生成
 
-示例: `#dear @群主`, `#dear 123456`
+示例: `#dear @群主`, `#dear 123456`  
+![dear](example/dear.gif)
 
 ### 5000choyen
 
 5000choyen 表情包生成
 
-示例: `#choyen 我想吃 肯德基疯狂星期四套餐`
-
-### 诺基亚
-
-诺基亚短信 表情包生成
-
-示例: `#pinyin 无内鬼，来点色图`
+示例: `#choyen 我想吃 肯德基疯狂星期四套餐`  
+![5000choyen](example/5000choyen.png)
 
 ### zzkia
 
 诺基亚短信 表情包生成
 
-示例: `#pinyin 无内鬼，来点色图`
-
-### 随机表情包
-
-随机表情包一张（通过 Mirai Hibernate Plugin 插件 从消息中收集得到）
-
-示例: `随机表情包`
+示例: `#pinyin 无内鬼，来点色图`  
+![zzkia](example/zzkia.png)
 
 ### 游戏王
 
@@ -70,19 +63,28 @@ PornHub Login 生成
 Welcome PR
 你可以PR
 ```
+![spell](example/spell.png)
 
 ```
 #trap @Him188
 Useless PR
 这个还是由我们自己实现
 ```
+![trap](example/trap.png)
 
 ```
 #monster @LaoLittle
 
-援交JK
+援交JD
 五元一次
 ```
+![monster](example/monster.png)
+
+### 随机表情包
+
+随机表情包一张（通过 Mirai Hibernate Plugin 插件 从消息中收集得到）
+
+示例: `随机表情包`
 
 ## 配置
 
