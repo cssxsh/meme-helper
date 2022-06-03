@@ -66,17 +66,19 @@ PornHub Login 生成
 
 示例: 
 ```
-#spell @群主
-傻逼
-一个大傻逼
+#spell @Him188
+Welcome PR
+你可以PR
 ```
 
 ```
-#trap @群主
+#trap @Him188
+Useless PR
+这个还是由我们自己实现
 ```
 
 ```
-#monster @群主
+#monster @LaoLittle
 
 援交JK
 五元一次
