@@ -1,9 +1,7 @@
 package xyz.cssxsh.mirai.meme
 
-import kotlinx.coroutines.*
 import net.mamoe.mirai.console.plugin.jvm.*
 import net.mamoe.mirai.event.*
-import xyz.cssxsh.mirai.meme.data.*
 
 public object MemeHelperPlugin : KotlinPlugin(
     JvmPluginDescription(
@@ -13,21 +11,19 @@ public object MemeHelperPlugin : KotlinPlugin(
     ) {
         author("cssxsh")
         dependsOn("xyz.cssxsh.mirai.plugin.mirai-skia-plugin", ">= 1.1.0", false)
-        dependsOn("xyz.cssxsh.mirai.plugin.mirai-hibernate-plugin", ">= 2.2.0", true)
     }
 ) {
 
     override fun onEnable() {
-        MemeRegexConfig.reload()
         MemeHelper.registerTo(globalEventChannel())
         avatarFolder = resolveDataFile("avatar").apply { mkdirs() }
+        imageFolder = resolveDataFile("image").apply { mkdirs() }
 
-        launch {
-            loadMaterial(folder = resolveDataFile("material"))
-        }
+        loadMemeService()
     }
 
     override fun onDisable() {
         MemeHelper.cancelAll()
+        saveMemeService()
     }
 }
