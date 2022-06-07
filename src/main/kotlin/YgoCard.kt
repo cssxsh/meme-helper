@@ -204,7 +204,7 @@ public sealed class YgoCard {
         name().layout(615F).paint(canvas, 65F, 63F)
 
         // draw attribute
-        val attribute = project.resolve("source/mold/attribute/${locale.country}/${attribute}.png")
+        val attribute = project.resolve("source/mold/attribute/${locale.language}/${attribute}.png")
         canvas.drawImageRect(Image.makeFromEncoded(attribute.readBytes()), Rect.makeXYWH(680F, 57F, 75F, 75F))
 
         // draw Type
