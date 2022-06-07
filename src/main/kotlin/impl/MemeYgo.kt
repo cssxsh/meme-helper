@@ -118,17 +118,17 @@ public class MemeYgo: MemeService {
             lines.any { it.startsWith(prefix = "atk=") } -> {
                 val line = lines.first { it.startsWith(prefix = "atk=") }
                 lines.remove(element = line)
-                line.removePrefix(prefix = "atk=").toInt()
+                line.removePrefix(prefix = "atk=")
             }
-            else -> 0
+            else -> "0"
         }
         val defend = when {
             lines.any { it.startsWith(prefix = "def=") } -> {
                 val line = lines.first { it.startsWith(prefix = "def=") }
                 lines.remove(element = line)
-                line.removePrefix(prefix = "def=").toInt()
+                line.removePrefix(prefix = "def=")
             }
-            else -> 0
+            else -> "0"
         }
         val copyright = when {
             lines.any { it.startsWith(prefix = "copyright=") } -> {

@@ -46,8 +46,8 @@ public sealed class YgoCard {
         override var face: Image,
         override var description: String,
         val level: Int = 1,
-        val attack: Int = 0,
-        val defend: Int = 0,
+        val attack: String = "0",
+        val defend: String = "0",
         override val race: List<String>,
         override var type: String = "",
         override var attribute: Attribute,
@@ -242,9 +242,9 @@ public sealed class YgoCard {
                     strokeWidth = 2F
                 })
                 value("ATK/").layout(100F).paint(canvas, 413F, 1080F)
-                value("$attack").layout(100F).paint(canvas, 485F, 1080F)
+                value(attack).layout(100F).paint(canvas, 485F, 1080F)
                 value("DEF/").layout(100F).paint(canvas, 578F, 1080F)
-                value("$defend").layout(100F).paint(canvas, 650F, 1080F)
+                value(defend).layout(100F).paint(canvas, 650F, 1080F)
             }
             is Spell, is Trap -> Unit
         }
