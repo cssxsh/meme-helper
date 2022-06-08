@@ -59,6 +59,8 @@ public class MemeYgo: MemeService {
                 }
                 file.deleteOnExit()
             }
+            ygo.resolve("source/mold/attribute/jp")
+                .renameTo(ygo.resolve("source/mold/attribute/ja"))
             System.setProperty(YgoCard.SOURCE_KEY, ygo.path)
 
             loaded = true
