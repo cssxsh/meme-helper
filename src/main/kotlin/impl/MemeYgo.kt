@@ -12,6 +12,10 @@ import java.io.File
 import java.util.*
 import java.util.zip.*
 
+/**
+ * [游戏王制卡器](https://ymssx.github.io/ygo/#/)
+ * @see YgoCard
+ */
 public class MemeYgo: MemeService {
     override val name: String = "Ygo"
     override val id: String = "ygo"
@@ -90,10 +94,10 @@ public class MemeYgo: MemeService {
             else -> sender.nameCardOrNick
         }
         val attribute = when {
-            lines.any { it.startsWith(prefix = "attribute=") } -> {
-                val line = lines.first { it.startsWith(prefix = "attribute=") }
+            lines.any { it.startsWith(prefix = "attr=") } -> {
+                val line = lines.first { it.startsWith(prefix = "attr=") }
                 lines.remove(element = line)
-                line.removePrefix(prefix = "attribute=").let { YgoCard.Attribute.valueOf(it) }
+                line.removePrefix(prefix = "attr=").let { YgoCard.Attribute.valueOf(it) }
             }
             else -> YgoCard.Attribute.monster().random()
         }

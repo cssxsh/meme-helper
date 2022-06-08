@@ -11,6 +11,9 @@ import xyz.cssxsh.skia.*
 import java.io.File
 import java.util.*
 
+/**
+ * [PetPet](https://benisland.neocities.org/petpet)
+ */
 public class MemePetPet : MemeService {
     override val name: String = "PetPet Meme"
     override val id: String = "petpet"

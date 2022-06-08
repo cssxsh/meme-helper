@@ -4,13 +4,16 @@ import kotlinx.coroutines.*
 import net.mamoe.mirai.console.permission.*
 import net.mamoe.mirai.event.events.*
 import net.mamoe.mirai.message.data.*
-import xyz.cssxsh.mirai.meme.download
+import xyz.cssxsh.mirai.meme.*
 import xyz.cssxsh.mirai.meme.service.*
 import xyz.cssxsh.mirai.skia.makeSnapshotResource
 import xyz.cssxsh.skia.*
 import java.io.File
 import java.util.*
 
+/**
+ * [zzkia](https://github.com/dcalsky/zzkia)
+ */
 public class MemeZZKIA : MemeService {
     override val name: String = "ZZKIA Pinyin"
     override val id: String = "zzkia"
