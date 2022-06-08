@@ -3,6 +3,7 @@ plugins {
     kotlin("plugin.serialization") version "1.6.21"
 
     id("net.mamoe.mirai-console") version "2.11.1"
+    id("net.mamoe.maven-central-publish") version "0.7.1"
 }
 
 group = "xyz.cssxsh.meme-helper"
@@ -11,6 +12,16 @@ version = "1.0.0"
 repositories {
     mavenLocal()
     mavenCentral()
+}
+
+mavenCentralPublish {
+    useCentralS01()
+    singleDevGithubProject("cssxsh", "meme-helper")
+    licenseFromGitHubProject("AGPL-3.0", "master")
+    publication {
+        artifact(tasks.getByName("buildPlugin"))
+        artifact(tasks.getByName("buildPluginLegacy"))
+    }
 }
 
 dependencies {
