@@ -1,12 +1,12 @@
 package xyz.cssxsh.mirai.meme
 
-import net.mamoe.mirai.utils.toInt
+import net.mamoe.mirai.utils.*
 
 public data class EmojiKitchen(public val urls: Map<String, String>) {
 
     public fun cook(emojis: Sequence<String>): Pair<String, String>? {
         val filename = emojis.joinToString(separator = "_", postfix = ".png") { it.unicode() }
-        println(filename)
+        logger.debug { filename }
         val url = urls[filename]
         if (url != null) {
             return filename to url

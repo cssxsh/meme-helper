@@ -61,6 +61,8 @@ public class MemeYgo: MemeService {
             }
             ygo.resolve("source/mold/attribute/jp")
                 .renameTo(ygo.resolve("source/mold/attribute/ja"))
+            ygo.resolve("source/mold/attribute/cn")
+                .renameTo(ygo.resolve("source/mold/attribute/zh"))
             System.setProperty(YgoCard.SOURCE_KEY, ygo.path)
 
             loaded = true

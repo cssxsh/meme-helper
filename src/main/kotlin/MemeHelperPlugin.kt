@@ -7,7 +7,7 @@ public object MemeHelperPlugin : KotlinPlugin(
     JvmPluginDescription(
         id = "xyz.cssxsh.mirai.plugin.meme-helper",
         name = "meme-helper",
-        version = "1.0.1",
+        version = "1.0.2",
     ) {
         author("cssxsh")
         dependsOn("xyz.cssxsh.mirai.plugin.mirai-skia-plugin", ">= 1.1.0", false)
