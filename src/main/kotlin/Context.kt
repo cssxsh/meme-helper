@@ -12,7 +12,7 @@ import io.ktor.utils.io.jvm.javaio.*
 import kotlinx.coroutines.*
 import net.mamoe.mirai.console.permission.*
 import net.mamoe.mirai.console.plugin.jvm.*
-import net.mamoe.mirai.message.data.Image
+import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.message.data.Image.Key.queryUrl
 import net.mamoe.mirai.utils.*
 import org.jetbrains.skia.Image as SkiaImage
@@ -110,8 +110,8 @@ internal fun JvmPlugin.loadMemeService() {
             while (iterator.hasNext()) {
                 try {
                     val service = iterator.next()
-                    if (service in MemeService.instances) {
-                        logger.verbose { "${service.name} 加载重复" }
+                    if (MemeService[service.id] != null) {
+                        logger.verbose { "${service.id} 加载重复" }
                         continue
                     }
 
