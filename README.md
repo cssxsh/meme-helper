@@ -11,6 +11,8 @@
 * [User Manual](https://github.com/mamoe/mirai/blob/dev/docs/UserManual.md)
 * [Permission Command](https://github.com/mamoe/mirai/blob/dev/mirai-console/docs/BuiltInCommands.md#permissioncommand)
 
+插件权限ID `xyz.cssxsh.mirai.plugin.meme-helper:*`，使用前授予权限
+
 插件依赖于 [Mirai Skia Plugin](https://github.com/cssxsh/mirai-skia-plugin) (必要)
 插件依赖于 [Mirai Hibernate Plugin](https://github.com/cssxsh/mirai-hibernate-plugin) (不必要)
 
