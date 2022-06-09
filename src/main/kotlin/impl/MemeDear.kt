@@ -20,7 +20,7 @@ public class MemeDear : MemeService {
     override var regex: Regex = """^#dear\s*(\d+)?""".toRegex()
         private set
     override val properties: Properties = Properties().apply { put("regex", regex.pattern) }
-    override lateinit var permission: Permission
+    override var permission: Permission = Permission.getRootPermission()
         private set
 
     override fun load(folder: File, permission: Permission) {

@@ -24,10 +24,10 @@ public class MemeEmojiKitchen : MemeService {
         private set
     override val regex: Regex = EmojiKitchen.REGEX.toRegex()
     override val properties: Properties = Properties()
-    override lateinit var permission: Permission
+    override var permission: Permission = Permission.getRootPermission()
         private set
     private var kitchen: EmojiKitchen = EmojiKitchen(urls = emptyMap())
-    private lateinit var folder: File
+    private var folder: File = File(System.getProperty("os.dir")).resolve(".emoji")
 
     override fun load(folder: File, permission: Permission) {
         this.folder = folder

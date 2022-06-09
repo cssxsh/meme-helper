@@ -17,7 +17,7 @@ public class MemeRecord : MemeService {
     override var regex: Regex = """^#群友表情""".toRegex()
         private set
     override val properties: Properties = Properties().apply { put("regex", regex.pattern) }
-    override lateinit var permission: Permission
+    override var permission: Permission = Permission.getRootPermission()
         private set
 
     override fun load(folder: File, permission: Permission) {

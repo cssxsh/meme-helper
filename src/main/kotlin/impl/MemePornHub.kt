@@ -17,7 +17,7 @@ public class MemePornHub : MemeService {
     override var regex: Regex = """^#ph\s+(\S+)\s+(\S+)""".toRegex()
         private set
     override val properties: Properties = Properties().apply { put("regex", regex.pattern) }
-    override lateinit var permission: Permission
+    override var permission: Permission = Permission.getRootPermission()
         private set
 
     override fun load(folder: File, permission: Permission) {
