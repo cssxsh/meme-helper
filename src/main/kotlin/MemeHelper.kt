@@ -15,7 +15,7 @@ public object MemeHelper : SimpleListenerHost() {
     /**
      * 在 第一个机器人上线之后，将启动 MemeService
      */
-    @EventHandler(concurrency = ConcurrencyKind.CONCURRENT)
+    @EventHandler(concurrency = ConcurrencyKind.LOCKED)
     public fun BotOnlineEvent.online(): ListeningStatus {
         bot.id
         for (service in MemeService) {
