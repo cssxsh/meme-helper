@@ -27,7 +27,7 @@ public class MemeEmojiKitchen : MemeService {
     override var permission: Permission = Permission.getRootPermission()
         private set
     private var kitchen: EmojiKitchen = EmojiKitchen(urls = emptyMap())
-    private var folder: File = File(System.getProperty("os.dir")).resolve(".emoji")
+    private var folder: File = File(System.getProperty("user.dir") ?: ".").resolve(".emoji")
 
     override fun load(folder: File, permission: Permission) {
         this.folder = folder
