@@ -22,8 +22,11 @@ import java.time.*
 import java.util.*
 
 internal val logger by lazy {
-    val open = System.getProperty("xyz.cssxsh.mirai.meme.logger", "true").toBoolean()
-    if (open) MemeHelperPlugin.logger else SilentLogger
+    try {
+        MemeHelperPlugin.logger
+    } catch (_: Throwable) {
+        MiraiLogger.Factory.create(MemeHelper::class)
+    }
 }
 
 internal lateinit var avatarFolder: File
