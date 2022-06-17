@@ -12,6 +12,8 @@ public object MemeHelperPlugin : KotlinPlugin(
         author("cssxsh")
         dependsOn("xyz.cssxsh.mirai.plugin.mirai-skia-plugin", ">= 1.1.0", false)
         dependsOn("xyz.cssxsh.mirai.plugin.mirai-hibernate-plugin", ">= 2.2.0", true)
+        dependsOn("xyz.cssxsh.mirai.plugin.weibo-helper", true)
+        dependsOn("xyz.cssxsh.mirai.plugin.bilibili-helper", true)
     }
 ) {
 
