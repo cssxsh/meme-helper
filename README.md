@@ -13,10 +13,21 @@
 
 插件权限ID `xyz.cssxsh.mirai.plugin.meme-helper:*`，使用前授予权限
 
-插件依赖于 [Mirai Skia Plugin](https://github.com/cssxsh/mirai-skia-plugin) (必要)
-插件依赖于 [Mirai Hibernate Plugin](https://github.com/cssxsh/mirai-hibernate-plugin) (不必要)
+插件依赖于 [Mirai Skia Plugin](https://github.com/cssxsh/mirai-skia-plugin) (必要)  
+插件依赖于 [Mirai Hibernate Plugin](https://github.com/cssxsh/mirai-hibernate-plugin) (不必要)  
 
 **目前插件开发处于实验性阶段**
+
+## 安装
+
+### MCL 指令安装
+
+`./mcl --update-package xyz.cssxsh:meme-helper --channel stable --type plugin`
+
+### 手动安装
+
+1. 运行 [Mirai Console](https://github.com/mamoe/mirai-console) 生成`plugins`文件夹
+2. 从 [Releases](https://github.com/cssxsh/meme-helper/releases) 下载`jar`并将其放入`plugins`文件夹中
 
 ## 基本功能
 

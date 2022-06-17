@@ -6,8 +6,8 @@ plugins {
     id("net.mamoe.maven-central-publish") version "0.7.1"
 }
 
-group = "xyz.cssxsh.meme-helper"
-version = "1.0.2"
+group = "xyz.cssxsh"
+version = "1.0.3"
 
 repositories {
     mavenLocal()
@@ -25,8 +25,10 @@ mavenCentralPublish {
 }
 
 dependencies {
-    compileOnly("xyz.cssxsh.mirai:mirai-hibernate-plugin:2.2.3")
-    compileOnly("xyz.cssxsh.mirai:mirai-skia-plugin:1.1.0")
+    compileOnly("xyz.cssxsh.mirai:mirai-hibernate-plugin:2.2.4")
+    compileOnly("xyz.cssxsh.mirai:mirai-skia-plugin:1.1.1")
+    compileOnly("xyz.cssxsh:weibo-helper:1.5.0")
+    compileOnly("xyz.cssxsh:bilibili-helper:1.5.2")
     compileOnly("net.mamoe:mirai-core-utils:2.11.1")
     // Test
     testImplementation(kotlin("test", "1.6.21"))
@@ -35,7 +37,7 @@ dependencies {
     testImplementation("org.jetbrains.skiko:skiko-awt-runtime-macos-arm64:0.7.20")
     testImplementation("org.jetbrains.skiko:skiko-awt-runtime-macos-x64:0.7.20")
     testImplementation("org.jetbrains.skiko:skiko-awt-runtime-windows-x64:0.7.20")
-    testImplementation("xyz.cssxsh.mirai:mirai-skia-plugin:1.1.0")
+    testImplementation("xyz.cssxsh.mirai:mirai-skia-plugin:1.1.1")
     testImplementation("net.mamoe:mirai-core-utils:2.11.1")
 }
 
