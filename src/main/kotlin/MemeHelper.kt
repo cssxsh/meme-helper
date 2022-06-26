@@ -12,21 +12,6 @@ import kotlin.coroutines.cancellation.*
 
 public object MemeHelper : SimpleListenerHost() {
 
-    /**
-     * 在 第一个机器人上线之后，将启动 MemeService
-     */
-    @EventHandler(concurrency = ConcurrencyKind.LOCKED)
-    public fun BotOnlineEvent.online(): ListeningStatus {
-        bot.id
-        for (service in MemeService) {
-            if (!service.loaded) continue
-            service.enable()
-            logger.info { "enable: ${service.name} - ${service.permission}" }
-        }
-
-        return ListeningStatus.STOPPED
-    }
-
     @EventHandler
     public suspend fun MessageEvent.handle() {
         for (service in MemeService) {
