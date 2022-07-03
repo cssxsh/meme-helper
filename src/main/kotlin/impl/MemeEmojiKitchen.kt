@@ -28,11 +28,12 @@ public class MemeEmojiKitchen : MemeService {
         private set
     private var kitchen: EmojiKitchen = EmojiKitchen(urls = emptyMap())
     private var folder: File = File(System.getProperty("user.dir") ?: ".").resolve(".emoji")
+    private lateinit var loadJob: Job
 
     override fun load(folder: File, permission: Permission) {
         this.folder = folder
         this.permission = permission
-        MemeService.launch {
+        loadJob = MemeService.launch {
             folder.mkdirs()
 
             val data = folder.resolve("image_urls.json")
@@ -58,7 +59,11 @@ public class MemeEmojiKitchen : MemeService {
         }
     }
 
-    override fun enable() {}
+    override fun enable() {
+        runBlocking {
+            loadJob.join()
+        }
+    }
 
     override fun disable() {}
 

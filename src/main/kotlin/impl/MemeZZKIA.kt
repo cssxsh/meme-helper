@@ -26,6 +26,8 @@ public class MemeZZKIA : MemeService {
     override var permission: Permission = Permission.getRootPermission()
         private set
 
+    private lateinit var loadJob: Job
+
     override fun load(folder: File, permission: Permission) {
         this.permission = permission
         when (val re = properties["regex"]) {
@@ -33,7 +35,7 @@ public class MemeZZKIA : MemeService {
             is Regex -> regex = re
             else -> {}
         }
-        MemeService.launch {
+        loadJob = MemeService.launch {
             val zzkia = folder.resolve("zzkia.jpg")
             if (zzkia.exists().not()) {
                 try {
@@ -57,7 +59,11 @@ public class MemeZZKIA : MemeService {
         }
     }
 
-    override fun enable() {}
+    override fun enable() {
+        runBlocking {
+            loadJob.join()
+        }
+    }
 
     override fun disable() {}
 

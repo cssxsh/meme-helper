@@ -22,6 +22,7 @@ public class MemeDear : MemeService {
     override val properties: Properties = Properties().apply { put("regex", regex.pattern) }
     override var permission: Permission = Permission.getRootPermission()
         private set
+    private lateinit var loadJob: Job
 
     override fun load(folder: File, permission: Permission) {
         this.permission = permission
@@ -30,7 +31,7 @@ public class MemeDear : MemeService {
             is Regex -> regex = re
             else -> {}
         }
-        MemeService.launch {
+        loadJob = MemeService.launch {
             val dear = folder.resolve("dear.gif")
             if (dear.exists().not()) {
                 download(urlString = "https://tva3.sinaimg.cn/large/003MWcpMly8gv4s019bzsg606o06o40902.gif", folder)
@@ -42,7 +43,11 @@ public class MemeDear : MemeService {
         }
     }
 
-    override fun enable() {}
+    override fun enable() {
+        runBlocking {
+            loadJob.join()
+        }
+    }
 
     override fun disable() {}
 
