@@ -58,7 +58,7 @@ public interface MemeService {
     public suspend fun MessageEvent.replier(match: MatchResult): Message?
 
     /**
-     * 加载接口，在 [xyz.cssxsh.mirai.meme.MemeHelperPlugin.onEnable] 时触发
+     * 加载接口，在 [xyz.cssxsh.mirai.meme.MemeHelperPlugin.onLoad] 时触发
      * @param folder 缓存文件夹
      * @see xyz.cssxsh.skia.FontUtils
      */
@@ -66,7 +66,7 @@ public interface MemeService {
     public fun load(folder: File, permission: Permission)
 
     /**
-     * 启动接口，在 [xyz.cssxsh.mirai.meme.MemeHelper.online] 时触发
+     * 启动接口，在 [xyz.cssxsh.mirai.meme.MemeHelperPlugin.onEnable] 时触发
      */
     public fun enable()
 

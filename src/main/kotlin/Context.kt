@@ -158,7 +158,19 @@ internal fun JvmPlugin.loadMemeService() {
     }
 }
 
-internal fun JvmPlugin.saveMemeService() {
+internal fun JvmPlugin.enableMemeService() {
+    for (service in MemeService) {
+        if (!service.loaded) continue
+        try {
+            service.enable()
+            logger.info { "enable success, ${service.name} - ${service.permission}" }
+        } catch (cause: Throwable) {
+            logger.warning({ "enable failure: ${service.name} - ${cause.message}" }, cause)
+        }
+    }
+}
+
+internal fun JvmPlugin.disableMemeService() {
     for (service in MemeService) {
         if (!service.loaded) continue
         service.disable()

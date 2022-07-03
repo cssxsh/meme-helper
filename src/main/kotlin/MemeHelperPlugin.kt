@@ -3,8 +3,6 @@ package xyz.cssxsh.mirai.meme
 import net.mamoe.mirai.console.extension.*
 import net.mamoe.mirai.console.plugin.jvm.*
 import net.mamoe.mirai.event.*
-import net.mamoe.mirai.utils.*
-import xyz.cssxsh.mirai.meme.service.*
 
 public object MemeHelperPlugin : KotlinPlugin(
     JvmPluginDescription(
@@ -21,29 +19,18 @@ public object MemeHelperPlugin : KotlinPlugin(
 ) {
 
     override fun PluginComponentStorage.onLoad() {
-        runAfterStartup {
-            for (service in MemeService) {
-                if (!service.loaded) continue
-                try {
-                    service.enable()
-                    logger.info { "enable success, ${service.name} - ${service.permission}" }
-                } catch (cause: Throwable) {
-                    logger.warning({ "enable failure: ${service.name} - ${cause.message}" }, cause)
-                }
-            }
-        }
+        loadMemeService()
     }
 
     override fun onEnable() {
         MemeHelper.registerTo(globalEventChannel())
         avatarFolder = resolveDataFile("avatar").apply { mkdirs() }
         imageFolder = resolveDataFile("image").apply { mkdirs() }
-
-        loadMemeService()
+        enableMemeService()
     }
 
     override fun onDisable() {
         MemeHelper.cancelAll()
-        saveMemeService()
+        disableMemeService()
     }
 }
