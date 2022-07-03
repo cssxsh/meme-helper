@@ -44,6 +44,7 @@ public class MemeEmojiKitchen : MemeService {
                         folder
                     )
                 } catch (_: Exception) {
+                    data.delete()
                     download(
                         urlString = "https://raw.fastgit.org/UCYT5040/Google-Sticker-Mashup-Research/main/image_urls.json",
                         folder

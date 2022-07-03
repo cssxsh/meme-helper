@@ -50,6 +50,7 @@ public class MemeZZKIA : MemeService {
                 try {
                     download(urlString = "https://github.com/dcalsky/bbq/raw/master/fonts/FZXS14-ex.ttf", folder)
                 } catch (_: Exception) {
+                    fzxs14.delete()
                     download(urlString = "https://font.taofont.com/en_fonts/fonts/f/FZXS14.ttf", folder)
                 }.renameTo(fzxs14)
             }
