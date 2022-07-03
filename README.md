@@ -4,7 +4,7 @@
 > 
 [![Release](https://img.shields.io/github/v/release/cssxsh/meme-helper)](https://github.com/cssxsh/meme-helper/releases)
 [![Downloads](https://img.shields.io/github/downloads/cssxsh/meme-helper/total)](https://shields.io/category/downloads)
-[![MiraiForum](https://img.shields.io/badge/post-on%20MiraiForum-yellow)](https://mirai.mamoe.net/topic/334)
+[![MiraiForum](https://img.shields.io/badge/post-on%20MiraiForum-yellow)](https://mirai.mamoe.net/topic/1271)
 
 **使用前应该查阅的相关文档或项目**
 
@@ -84,21 +84,21 @@ PornHub Login 生成
 示例: 
 ```
 #spell @Him188
-Welcome PR
+name=Welcome PR
 你可以PR
 ```
 ![spell](example/spell.png)
 
 ```
 #trap @Him188
-Useless PR
+name=Useless PR
 这个还是由我们自己实现
 ```
 ![trap](example/trap.png)
 
 ```
 #monster @LaoLittle
-援交JD
+name=援交JD
 五元一次
 ```
 ![monster](example/monster.png)
