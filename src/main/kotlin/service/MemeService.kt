@@ -63,12 +63,12 @@ public interface MemeService {
      * @see xyz.cssxsh.skia.FontUtils
      */
     @Throws(IOException::class)
-    public fun load(folder: File, permission: Permission)
+    public fun load(folder: File)
 
     /**
      * 启动接口，在 [xyz.cssxsh.mirai.meme.MemeHelperPlugin.onEnable] 时触发
      */
-    public fun enable()
+    public fun enable(permission: Permission)
 
     /**
      * 关闭接口，在 [xyz.cssxsh.mirai.meme.MemeHelperPlugin.onDisable] 时触发

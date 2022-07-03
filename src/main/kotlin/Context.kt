@@ -123,7 +123,7 @@ internal fun JvmPlugin.loadMemeService() {
 
                         yield(service)
                     } catch (cause: Throwable) {
-                        logger.info({ "${provider.type().name} 加载失败" }, cause)
+                        logger.warning({ "${provider.type().name} 加载失败" }, cause)
                         continue
                     }
                 }
@@ -145,15 +145,9 @@ internal fun JvmPlugin.loadMemeService() {
                 }
             }
 
-            val permission = PermissionService.INSTANCE.register(
-                id = permissionId(service.id),
-                description = service.description,
-                parent = parentPermission
-            )
-
             val folder = dataFolder.resolve(service.id).apply { mkdirs() }
 
-            service.load(folder = folder, permission = permission)
+            service.load(folder = folder)
         } catch (cause: Throwable) {
             logger.info({ "${service.name} 加载失败" }, cause)
             continue
@@ -168,7 +162,13 @@ internal fun JvmPlugin.enableMemeService() {
     for (service in MemeService) {
         if (!service.loaded) continue
         try {
-            service.enable()
+            val permission = PermissionService.INSTANCE.register(
+                id = permissionId(service.id),
+                description = service.description,
+                parent = parentPermission
+            )
+
+            service.enable(permission)
             logger.info { "enable success, ${service.name} - ${service.permission}" }
         } catch (cause: Throwable) {
             logger.warning({ "enable failure: ${service.name} - ${cause.message}" }, cause)

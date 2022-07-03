@@ -18,13 +18,11 @@ public class MemeBiliBiliEmote : MemeService {
     override var regex: Regex = """^#B表情""".toRegex()
         private set
     override val properties: Properties = Properties().apply { put("regex", regex.pattern) }
-    override var permission: Permission = Permission.getRootPermission()
-        private set
+    override lateinit var permission: Permission
     private var folder: File = File(System.getProperty("user.dir") ?: ".").resolve(".bilibili")
 
-    override fun load(folder: File, permission: Permission) {
+    override fun load(folder: File) {
         this.folder = folder
-        this.permission = permission
         when (val re = properties["regex"]) {
             is String -> regex = re.toRegex()
             is Regex -> regex = re
@@ -39,7 +37,9 @@ public class MemeBiliBiliEmote : MemeService {
 
     }
 
-    override fun enable() {}
+    override fun enable(permission: Permission) {
+        this.permission = permission
+    }
 
     override fun disable() {}
 

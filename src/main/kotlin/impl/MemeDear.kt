@@ -15,17 +15,14 @@ public class MemeDear : MemeService {
     override val name: String = "Dear"
     override val id: String = "dear"
     override val description: String = "亲亲 生成器"
-    override var loaded: Boolean = false
-        private set
+    override val loaded: Boolean = true
     override var regex: Regex = """^#dear\s*(\d+)?""".toRegex()
         private set
     override val properties: Properties = Properties().apply { put("regex", regex.pattern) }
-    override var permission: Permission = Permission.getRootPermission()
-        private set
+    override lateinit var permission: Permission
     private lateinit var loadJob: Job
 
-    override fun load(folder: File, permission: Permission) {
-        this.permission = permission
+    override fun load(folder: File) {
         when (val re = properties["regex"]) {
             is String -> regex = re.toRegex()
             is Regex -> regex = re
@@ -38,12 +35,11 @@ public class MemeDear : MemeService {
                     .renameTo(dear)
             }
             System.setProperty(DEAR_ORIGIN, dear.absolutePath)
-
-            loaded = true
         }
     }
 
-    override fun enable() {
+    override fun enable(permission: Permission) {
+        this.permission = permission
         runBlocking {
             loadJob.join()
         }

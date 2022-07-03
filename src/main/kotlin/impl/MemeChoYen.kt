@@ -20,11 +20,9 @@ public class MemeChoYen : MemeService {
     override var regex: Regex = """^#choyen\s+(\S+)\s+(\S+)""".toRegex()
         private set
     override val properties: Properties = Properties().apply { put("regex", regex.pattern) }
-    override var permission: Permission = Permission.getRootPermission()
-        private set
+    override lateinit var permission: Permission
 
-    override fun load(folder: File, permission: Permission) {
-        this.permission = permission
+    override fun load(folder: File) {
         when (val re = properties["regex"]) {
             is String -> regex = re.toRegex()
             is Regex -> regex = re
@@ -32,8 +30,9 @@ public class MemeChoYen : MemeService {
         }
     }
 
-    override fun enable() {}
-
+    override fun enable(permission: Permission) {
+        this.permission = permission
+    }
     override fun disable() {}
 
     override suspend fun MessageEvent.replier(match: MatchResult): Image {

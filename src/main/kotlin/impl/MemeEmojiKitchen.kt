@@ -20,19 +20,16 @@ public class MemeEmojiKitchen : MemeService {
     override val name: String = "Emoji Kitchen"
     override val id: String = "emoji"
     override val description: String = "Emoji 合成"
-    override var loaded: Boolean = false
-        private set
+    override val loaded: Boolean = true
     override val regex: Regex = EmojiKitchen.REGEX.toRegex()
     override val properties: Properties = Properties()
-    override var permission: Permission = Permission.getRootPermission()
-        private set
+    override lateinit var permission: Permission
     private var kitchen: EmojiKitchen = EmojiKitchen(urls = emptyMap())
     private var folder: File = File(System.getProperty("user.dir") ?: ".").resolve(".emoji")
     private lateinit var loadJob: Job
 
-    override fun load(folder: File, permission: Permission) {
+    override fun load(folder: File) {
         this.folder = folder
-        this.permission = permission
         loadJob = MemeService.launch {
             folder.mkdirs()
 
@@ -55,12 +52,11 @@ public class MemeEmojiKitchen : MemeService {
                 @OptIn(ExperimentalSerializationApi::class)
                 EmojiKitchen(urls = Json.decodeFromStream<HashMap<String, String>>(stream))
             }
-
-            loaded = true
         }
     }
 
-    override fun enable() {
+    override fun enable(permission: Permission) {
+        this.permission = permission
         runBlocking {
             loadJob.join()
         }

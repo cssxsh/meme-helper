@@ -4,7 +4,7 @@ import net.mamoe.mirai.console.permission.*
 import net.mamoe.mirai.event.events.*
 import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
-import xyz.cssxsh.mirai.meme.download
+import xyz.cssxsh.mirai.meme.*
 import xyz.cssxsh.mirai.meme.service.*
 import xyz.cssxsh.mirai.weibo.data.*
 import java.io.File
@@ -18,13 +18,11 @@ public class MemeWeiboEmoticon : MemeService {
     override var regex: Regex = """^#微博表情""".toRegex()
         private set
     override val properties: Properties = Properties().apply { put("regex", regex.pattern) }
-    override var permission: Permission = Permission.getRootPermission()
-        private set
+    override lateinit var permission: Permission
     private var folder: File = File(System.getProperty("user.dir") ?: ".").resolve(".weibo")
 
-    override fun load(folder: File, permission: Permission) {
+    override fun load(folder: File) {
         this.folder = folder
-        this.permission = permission
         when (val re = properties["regex"]) {
             is String -> regex = re.toRegex()
             is Regex -> regex = re
@@ -39,7 +37,9 @@ public class MemeWeiboEmoticon : MemeService {
 
     }
 
-    override fun enable() {}
+    override fun enable(permission: Permission) {
+        this.permission = permission
+    }
 
     override fun disable() {}
 
