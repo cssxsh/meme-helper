@@ -107,22 +107,28 @@ internal suspend fun download(urlString: String, folder: File): File = superviso
 internal fun JvmPlugin.loadMemeService() {
     MemeService.coroutineContext = childScopeContext("MemeServiceLoader", Dispatchers.IO)
     val services = sequence<MemeService> {
+        val oc = Thread.currentThread().contextClassLoader
+
         @OptIn(MiraiInternalApi::class)
         for (classLoader in MemeHelperPlugin.loader.classLoaders) {
-            val iterator = ServiceLoader.load(MemeService::class.java, classLoader).iterator()
-            while (iterator.hasNext()) {
-                try {
-                    val service = iterator.next()
-                    if (MemeService[service.id] != null) {
-                        logger.verbose { "${service.id} 加载重复" }
+            Thread.currentThread().contextClassLoader = classLoader
+            try {
+                for (provider in ServiceLoader.load(MemeService::class.java, classLoader).stream()) {
+                    try {
+                        val service = provider.type().kotlin.objectInstance ?: provider.get()
+                        if (MemeService[service.id] != null) {
+                            logger.verbose { "${service.id} 加载重复" }
+                            continue
+                        }
+
+                        yield(service)
+                    } catch (cause: Throwable) {
+                        logger.info({ "${provider.type().name} 加载失败" }, cause)
                         continue
                     }
-
-                    yield(service)
-                } catch (cause: Throwable) {
-                    logger.info({ "MemeService 加载失败" }, cause)
-                    continue
                 }
+            } finally {
+                Thread.currentThread().contextClassLoader = oc
             }
         }
     }
