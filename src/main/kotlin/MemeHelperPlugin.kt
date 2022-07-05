@@ -1,7 +1,10 @@
 package xyz.cssxsh.mirai.meme
 
+import net.mamoe.mirai.console.MiraiConsole
 import net.mamoe.mirai.console.extension.*
 import net.mamoe.mirai.console.plugin.jvm.*
+import net.mamoe.mirai.console.plugin.*
+import net.mamoe.mirai.console.util.*
 import net.mamoe.mirai.event.*
 
 public object MemeHelperPlugin : KotlinPlugin(
@@ -23,10 +26,14 @@ public object MemeHelperPlugin : KotlinPlugin(
     }
 
     override fun onEnable() {
-        MemeHelper.registerTo(globalEventChannel())
+        // XXX: mirai console version check
+        check(SemVersion.parseRangeRequirement(">= 2.12.0-RC").test(MiraiConsole.version)) {
+            "$name $version 需要 Mirai-Console 版本 >= 2.12.0，目前版本是 ${MiraiConsole.version}"
+        }
         avatarFolder = resolveDataFile("avatar").apply { mkdirs() }
         imageFolder = resolveDataFile("image").apply { mkdirs() }
         enableMemeService()
+        MemeHelper.registerTo(globalEventChannel())
     }
 
     override fun onDisable() {
