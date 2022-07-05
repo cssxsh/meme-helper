@@ -25,7 +25,7 @@ mavenCentralPublish {
 }
 
 dependencies {
-    compileOnly("xyz.cssxsh.mirai:mirai-hibernate-plugin:2.2.4")
+    compileOnly("xyz.cssxsh.mirai:mirai-hibernate-plugin:2.3.1")
     compileOnly("xyz.cssxsh.mirai:mirai-skia-plugin:1.1.2")
     compileOnly("xyz.cssxsh:weibo-helper:1.5.2")
     compileOnly("xyz.cssxsh:bilibili-helper:1.6.0")
@@ -34,6 +34,10 @@ dependencies {
     testImplementation(kotlin("test", "1.6.21"))
     testImplementation("xyz.cssxsh.mirai:mirai-skia-plugin:1.1.2")
     testImplementation("net.mamoe:mirai-core-utils:2.12.0")
+}
+
+mirai {
+    jvmTarget = JavaVersion.VERSION_11
 }
 
 kotlin {
