@@ -10,6 +10,7 @@ import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import xyz.cssxsh.mirai.meme.*
 import xyz.cssxsh.mirai.meme.service.*
 import java.io.File
+import java.time.*
 import java.util.*
 import kotlin.collections.*
 
@@ -21,7 +22,7 @@ public class MemeEmojiKitchen : MemeService {
     override val id: String = "emoji"
     override val description: String = "Emoji 合成"
     override val loaded: Boolean = true
-    override val regex: Regex = EmojiKitchen.REGEX.toRegex()
+    override val regex: Regex = EmojiKitchen.EMOJI_REGEX.toRegex()
     override val properties: Properties = Properties()
     override lateinit var permission: Permission
     private var kitchen: EmojiKitchen = EmojiKitchen(urls = emptyMap())
@@ -34,6 +35,9 @@ public class MemeEmojiKitchen : MemeService {
             folder.mkdirs()
 
             val data = folder.resolve("image_urls.json")
+            if (OffsetDateTime.parse(EmojiKitchen.LAST_UPDATE).toInstant().toEpochMilli() > data.lastModified()) {
+                data.delete()
+            }
             if (data.exists().not()) {
                 try {
                     download(
@@ -65,8 +69,10 @@ public class MemeEmojiKitchen : MemeService {
     override fun disable() {}
 
     override suspend fun MessageEvent.replier(match: MatchResult): Message? {
-        val (filename, url) = kitchen
-            .cook(emojis = generateSequence(match, MatchResult::next).map { it.value })
+        val first = match.value
+        val second = match.next()?.value ?: return null
+        val (filename, url) = kitchen.cook(first, second)
+            ?: kitchen.cook(second, first)
             ?: return null
 
         return (folder.resolve(filename).takeIf { it.exists() } ?: download(urlString = url, folder = folder))
