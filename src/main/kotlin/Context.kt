@@ -36,6 +36,7 @@ internal lateinit var imageFolder: File
 internal val http = HttpClient(OkHttp) {
     CurlUserAgent()
     ContentEncoding()
+    expectSuccess = true
     install(HttpTimeout) {
         connectTimeoutMillis = 30_000
         socketTimeoutMillis = 30_000
@@ -65,6 +66,10 @@ public suspend fun avatar(id: Long, size: Int = 140): SkiaImage {
     return SkiaImage.makeFromEncoded(bytes = cache.readBytes())
 }
 
+/**
+ * 下载聊天图片
+ * @param image 聊天图片
+ */
 public suspend fun cache(image: Image): SkiaImage {
     val md5 = image.md5.toUHexString(separator = "")
     val cache = imageFolder.listFiles { file -> file.name.startsWith(prefix = md5) }?.firstOrNull()
@@ -82,20 +87,20 @@ public suspend fun cache(image: Image): SkiaImage {
 }
 
 internal suspend fun download(urlString: String, folder: File): File = supervisorScope {
-    with(http.get(urlString)) {
-        val relative = headers[HttpHeaders.ContentDisposition]
+    http.prepareGet(urlString).execute { response ->
+        val relative = response.headers[HttpHeaders.ContentDisposition]
             ?.let { ContentDisposition.parse(it).parameter(ContentDisposition.Parameters.FileName) }
-            ?: request.url.encodedPath.substringAfterLast('/').decodeURLPart()
+            ?: response.request.url.encodedPath.substringAfterLast('/').decodeURLPart()
 
         val file = folder.resolve(relative)
 
         if (file.exists()) {
             logger.info { "文件 ${file.name} 已存在，跳过下载" }
-            call.cancel("文件 ${file.name} 已存在，跳过下载")
+            response.cancel("文件 ${file.name} 已存在，跳过下载")
         } else {
             logger.info { "文件 ${file.name} 开始下载" }
             file.outputStream().use { output ->
-                val channel: ByteReadChannel = bodyAsChannel()
+                val channel = response.bodyAsChannel()
 
                 while (!channel.isClosedForRead) channel.copyTo(output)
             }
