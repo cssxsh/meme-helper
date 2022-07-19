@@ -140,7 +140,7 @@ internal fun JvmPlugin.loadMemeService() {
     }
     for (service in services) {
         try {
-            val properties = dataFolder.resolve("${service.id}.properties")
+            val properties = resolveConfigFile("${service.id}.properties")
             if (properties.exists()) {
                 properties.inputStream().use { input ->
                     service.properties.load(input)
@@ -151,7 +151,7 @@ internal fun JvmPlugin.loadMemeService() {
                 }
             }
 
-            val folder = dataFolder.resolve(service.id).apply { mkdirs() }
+            val folder = resolveDataFile(service.id).apply { mkdirs() }
 
             service.load(folder = folder)
         } catch (cause: Throwable) {

@@ -13,7 +13,6 @@ import kotlin.jvm.*
 
 /**
  * 表情包服务接口
- * @see MemeHandler
  */
 public interface MemeService {
 
@@ -48,12 +47,15 @@ public interface MemeService {
     public val permission: Permission
 
     /**
-     *
+     * 匹配的正则表达式
+     * @see MessageEvent.replier
      */
     public val regex: Regex
 
     /**
      * 表情包生成
+     * @param match 正则表达式匹配结果
+     * @see regex
      */
     public suspend fun MessageEvent.replier(match: MatchResult): Message?
 
@@ -67,6 +69,7 @@ public interface MemeService {
 
     /**
      * 启动接口，在 [xyz.cssxsh.mirai.meme.MemeHelperPlugin.onEnable] 时触发
+     * @param permission 分配的权限
      */
     public fun enable(permission: Permission)
 
