@@ -16,7 +16,11 @@ public object MemeHelper : SimpleListenerHost() {
     public suspend fun MessageEvent.handle() {
         for (service in MemeService) {
             if (!service.loaded) continue
-            if (!toCommandSender().hasPermission(service.permission)) continue
+            try {
+                if (!toCommandSender().hasPermission(service.permission)) continue
+            } catch (_: IllegalArgumentException) {
+                continue
+            }
 
             val match = service.regex.find(input = message.content) ?: continue
 

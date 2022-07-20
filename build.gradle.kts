@@ -7,11 +7,12 @@ plugins {
 }
 
 group = "xyz.cssxsh"
-version = "1.1.1"
+version = "1.1.2"
 
 repositories {
     mavenLocal()
     mavenCentral()
+    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
 }
 
 mavenCentralPublish {
@@ -20,13 +21,12 @@ mavenCentralPublish {
     licenseFromGitHubProject("AGPL-3.0", "master")
     publication {
         artifact(tasks.getByName("buildPlugin"))
-        artifact(tasks.getByName("buildPluginLegacy"))
     }
 }
 
 dependencies {
-    compileOnly("xyz.cssxsh.mirai:mirai-hibernate-plugin:2.3.1")
-    compileOnly("xyz.cssxsh.mirai:mirai-skia-plugin:1.1.3")
+    compileOnly("xyz.cssxsh.mirai:mirai-hibernate-plugin:2.4.0")
+    compileOnly("xyz.cssxsh.mirai:mirai-skia-plugin:1.1.6")
     compileOnly("xyz.cssxsh:weibo-helper:1.5.3")
     compileOnly("xyz.cssxsh:bilibili-helper:1.6.1")
     compileOnly("net.mamoe:mirai-core-utils:2.12.0")
@@ -47,7 +47,7 @@ dependencies {
     }
     // Test
     testImplementation(kotlin("test", "1.6.21"))
-    testImplementation("xyz.cssxsh.mirai:mirai-skia-plugin:1.1.3")
+    testImplementation("xyz.cssxsh.mirai:mirai-skia-plugin:1.1.6")
     testImplementation("net.mamoe:mirai-core-utils:2.12.0")
 }
 
