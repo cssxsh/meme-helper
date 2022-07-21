@@ -47,7 +47,7 @@ public class MemeWeiboEmoticon : MemeService {
         val content = message.content
         val emoticons = buildList {
             for ((phrase, emoticon) in WeiboEmoticonData.emoticons) {
-                if (phrase in content || "#${emoticon.category}" in content) add(emoticon)
+                if (phrase in content || "<${emoticon.category.ifEmpty { "默认" }}>" in content) add(emoticon)
             }
         }
         if (emoticons.isEmpty()) return null

@@ -47,7 +47,7 @@ public class MemeBiliBiliEmote : MemeService {
         val content = message.content
         val emotes = buildList {
             for ((text, item) in BiliEmoteData.dynamic) {
-                if ("#$text" in content) {
+                if ("<$text>" in content) {
                     addAll(item.emote)
                     continue
                 }
