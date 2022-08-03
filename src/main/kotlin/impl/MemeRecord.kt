@@ -22,7 +22,7 @@ public class MemeRecord : MemeService {
     override val id: String = "record"
     override val description: String = "从群聊记录里获得表情包"
     override var loaded: Boolean = true
-    override var regex: Regex = """^#群友表情\s(.*)|#(.*)#""".toRegex()
+    override var regex: Regex = """^#群友表情\s(.*)|#([^#\s]+)#""".toRegex()
         private set
     override val properties: Properties = Properties().apply { put("regex", regex.pattern) }
     override lateinit var permission: Permission
@@ -48,11 +48,6 @@ public class MemeRecord : MemeService {
 
     override fun load(folder: File) {
         this.folder = folder
-        when (val re = properties["regex"]) {
-            is String -> regex = re.toRegex()
-            is Regex -> regex = re
-            else -> {}
-        }
         loaded = try {
             MiraiHibernateRecorder
             true
@@ -69,7 +64,7 @@ public class MemeRecord : MemeService {
 
     override suspend fun MessageEvent.replier(match: MatchResult): MessageContent {
         val tag = match.groupValues.last { it.isNotEmpty() }
-        val record = if (tag.isEmpty()) {
+        val record = if (tag.startsWith('#')) {
             FaceRecord.random()
         } else {
             FaceRecord.match(tag = tag).randomOrNull() ?: return "查找失败 <${tag}>".toPlainText()
