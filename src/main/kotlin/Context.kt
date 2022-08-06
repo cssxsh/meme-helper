@@ -7,7 +7,6 @@ import io.ktor.client.plugins.compression.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.utils.io.*
 import io.ktor.utils.io.jvm.javaio.*
 import kotlinx.coroutines.*
 import net.mamoe.mirai.console.permission.*
@@ -49,16 +48,14 @@ internal val http = HttpClient(OkHttp) {
  * @param size 图片尺寸
  */
 public suspend fun avatar(id: Long, size: Int = 140): SkiaImage {
-    val cache = with(http.get("https://q.qlogo.cn/g?b=qq&nk=${id}&s=${size}")) {
-        val file = avatarFolder.resolve("${id}.${size}.${contentType()?.contentSubtype}")
-        if (file.exists().not() || file.lastModified() < (lastModified()?.time ?: 0)) {
+    val cache = http.prepareGet("https://q.qlogo.cn/g?b=qq&nk=${id}&s=${size}").execute { response ->
+        val file = avatarFolder.resolve("${id}.${size}.${response.contentType()?.contentSubtype}")
+        if (file.exists().not() || file.lastModified() < (response.lastModified()?.time ?: 0)) {
             file.outputStream().use { output ->
-                val channel: ByteReadChannel = bodyAsChannel()
+                val channel = response.bodyAsChannel()
 
                 while (!channel.isClosedForRead) channel.copyTo(output)
             }
-        } else {
-            call.cancel("文件 ${file.name} 已存在，跳过下载")
         }
         file
     }
@@ -73,10 +70,10 @@ public suspend fun avatar(id: Long, size: Int = 140): SkiaImage {
 public suspend fun cache(image: Image): SkiaImage {
     val md5 = image.md5.toUHexString(separator = "")
     val cache = imageFolder.listFiles { file -> file.name.startsWith(prefix = md5) }?.firstOrNull()
-        ?: with(http.get(image.queryUrl())) {
-        val file = imageFolder.resolve("${md5}.${contentType()?.contentSubtype}")
+        ?: http.prepareGet(image.queryUrl()).execute { response ->
+        val file = imageFolder.resolve("${md5}.${response.contentType()?.contentSubtype}")
         file.outputStream().use { output ->
-            val channel: ByteReadChannel = bodyAsChannel()
+            val channel = response.bodyAsChannel()
 
             while (!channel.isClosedForRead) channel.copyTo(output)
         }
@@ -96,7 +93,6 @@ internal suspend fun download(urlString: String, folder: File): File = superviso
 
         if (file.exists()) {
             logger.info { "文件 ${file.name} 已存在，跳过下载" }
-            response.cancel("文件 ${file.name} 已存在，跳过下载")
         } else {
             logger.info { "文件 ${file.name} 开始下载" }
             file.outputStream().use { output ->
