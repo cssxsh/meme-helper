@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "xyz.cssxsh"
-version = "1.1.2"
+version = "1.1.3"
 
 repositories {
     mavenLocal()
@@ -29,8 +29,8 @@ mavenCentralPublish {
 dependencies {
     compileOnly("xyz.cssxsh.mirai:mirai-hibernate-plugin:2.4.3")
     compileOnly("xyz.cssxsh.mirai:mirai-skia-plugin:1.1.7")
-    compileOnly("xyz.cssxsh:weibo-helper:1.5.3")
-    compileOnly("xyz.cssxsh:bilibili-helper:1.6.1")
+    compileOnly("xyz.cssxsh:weibo-helper:1.5.5")
+    compileOnly("xyz.cssxsh:bilibili-helper:1.6.3")
     compileOnly("net.mamoe:mirai-core-utils:2.12.1")
     implementation("io.ktor:ktor-client-okhttp:2.0.3") {
         exclude(group = "org.jetbrains.kotlin")
