@@ -18,7 +18,7 @@ repositories {
 mavenCentralPublish {
     useCentralS01()
     singleDevGithubProject("cssxsh", "meme-helper")
-    licenseFromGitHubProject("AGPL-3.0", "master")
+    licenseFromGitHubProject("AGPL-3.0")
     workingDir = System.getenv("PUBLICATION_TEMP")?.let { file(it).resolve(projectName) }
         ?: project.buildDir.resolve("publishing-tmp")
     publication {
