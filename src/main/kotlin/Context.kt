@@ -107,7 +107,7 @@ internal suspend fun download(urlString: String, folder: File): File = superviso
 }
 
 internal fun JvmPlugin.loadMemeService() {
-    MemeService.coroutineContext = childScopeContext("MemeServiceLoader", Dispatchers.IO)
+    MemeService.coroutineContext = coroutineContext + CoroutineName("MemeServiceLoader") + Dispatchers.IO
     val services = sequence<MemeService> {
         val oc = Thread.currentThread().contextClassLoader
 
