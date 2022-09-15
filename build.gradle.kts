@@ -32,12 +32,13 @@ dependencies {
     compileOnly("xyz.cssxsh:weibo-helper:1.5.5")
     compileOnly("xyz.cssxsh:bilibili-helper:1.6.3")
     compileOnly("net.mamoe:mirai-core-utils:2.13.0-M1")
-    implementation("io.ktor:ktor-client-okhttp:2.1.0") {
+    compileOnly("net.mamoe:mirai-core:2.13.0-M1")
+    implementation("io.ktor:ktor-client-okhttp:2.1.1") {
         exclude(group = "org.jetbrains.kotlin")
         exclude(group = "org.jetbrains.kotlinx")
         exclude(group = "org.slf4j")
     }
-    implementation("io.ktor:ktor-client-encoding:2.1.0") {
+    implementation("io.ktor:ktor-client-encoding:2.1.1") {
         exclude(group = "org.jetbrains.kotlin")
         exclude(group = "org.jetbrains.kotlinx")
         exclude(group = "org.slf4j")
