@@ -104,7 +104,7 @@ public object MarketFaceHelper {
 
     public fun build(itemId: Int, data: MarketFaceData): List<MarketFace> {
         val info = data.detail.base.single()
-        val timestamp = (data.timestamp ?: return emptyList()) / 1_000
+        val timestamp = requireNotNull(data.timestamp) { "Not Found Timestamp" } / 1_000
         val key = timestamp.toString().md5()
             .toUHexString("", 0, 16)
             .lowercase().toByteArray()
