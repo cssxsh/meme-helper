@@ -54,7 +54,7 @@ public class MemeWeiboEmoticon : MemeService {
         return buildMessageChain {
             for (emoticon in emoticons) {
                 val file = folder.resolve(emoticon.url.substringAfterLast('/')).takeIf { it.exists() }
-                        ?: download(urlString = emoticon.url, folder = folder)
+                    ?: download(urlString = emoticon.url, folder = folder)
                 +file.uploadAsImage(contact = subject)
             }
         }

@@ -16,7 +16,7 @@ import java.util.zip.*
  * [游戏王制卡器](https://ymssx.github.io/ygo/#/)
  * @see YgoCard
  */
-public class MemeYgo: MemeService {
+public class MemeYgo : MemeService {
     override val name: String = "Ygo"
     override val id: String = "ygo"
     override val description: String = "Ygo 卡片 生成器"
@@ -84,12 +84,12 @@ public class MemeYgo: MemeService {
             image != null -> cache(image = image)
             else -> avatar(id = id, size = 640)
         }
-        val lines = message.contentToString().lines().toMutableList()
+        val lines = message.filterIsInstance<PlainText>().last().content
+            .lineSequence().toMutableList()
         val member = (subject as? Group)?.get(id = id)
-        val memberProfile = member?.queryProfile()
-        val senderProfile = sender.queryProfile()
+        val profile = (member ?: sender).queryProfile()
         // XXX: handle command
-        lines.removeFirst()
+        lines.removeAll { it.startsWith('#') }
         val name = when {
             lines.any { it.startsWith(prefix = "name=") } -> {
                 val line = lines.first { it.startsWith(prefix = "name=") }
@@ -105,7 +105,7 @@ public class MemeYgo: MemeService {
                 lines.remove(element = line)
                 line.removePrefix(prefix = "attr=").let { YgoCard.Attribute.valueOf(it) }
             }
-            else -> YgoCard.Attribute.monster().random()
+            else -> YgoCard.Attribute.monster.random()
         }
         val level = when {
             lines.any { it.startsWith(prefix = "level=") } -> {
@@ -113,8 +113,7 @@ public class MemeYgo: MemeService {
                 lines.remove(element = line)
                 line.removePrefix(prefix = "level=").toInt()
             }
-            memberProfile != null -> memberProfile.qLevel / 16 + 1
-            else -> senderProfile.qLevel / 16 + 1
+            else -> profile.qLevel / 16 + 1
         }
         val race = when {
             lines.any { it.startsWith(prefix = "race=") } -> {
@@ -122,7 +121,11 @@ public class MemeYgo: MemeService {
                 lines.remove(element = line)
                 line.removePrefix(prefix = "race=").split(',', ' ', '/')
             }
-            else -> listOfNotNull(member?.specialTitle, member?.permission?.name, senderProfile.sex.name)
+            else -> listOfNotNull(
+                member?.specialTitle?.takeUnless { it.isBlank() },
+                member?.permission?.name,
+                profile.sex.name
+            )
         }
         val attack = when {
             lines.any { it.startsWith(prefix = "atk=") } -> {
@@ -150,8 +153,7 @@ public class MemeYgo: MemeService {
         }
         val description = when {
             lines.isNotEmpty() -> lines.joinToString(separator = "\n")
-            memberProfile != null -> memberProfile.sign
-            else -> senderProfile.sign
+            else -> profile.sign
         }
 
         val card = when (val type = match.groups[1]?.value) {

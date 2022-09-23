@@ -34,7 +34,7 @@ public sealed class YgoCard {
         dark, divine, earth, fire, light, spell, trap, water, wind;
 
         public companion object {
-            public fun monster(): List<Attribute> = values().toList() - spell - trap
+            public val monster: List<Attribute> by lazy { values().toList() - spell - trap }
         }
     }
 

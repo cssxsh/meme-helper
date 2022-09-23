@@ -36,7 +36,7 @@ public class MemeZZKIA : MemeService {
             val zzkia = folder.resolve("zzkia.jpg")
             if (zzkia.exists().not()) {
                 try {
-                   download(urlString = "https://github.com/dcalsky/bbq/raw/master/zzkia/images/4.jpg", folder)
+                    download(urlString = "https://github.com/dcalsky/bbq/raw/master/zzkia/images/4.jpg", folder)
                 } catch (_: Exception) {
                     download(urlString = "https://tvax2.sinaimg.cn/large/d6ca1528gy1h2ur64giqmj20yi0v3q52.jpg", folder)
                 }.renameTo(zzkia)

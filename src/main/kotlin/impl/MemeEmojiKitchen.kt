@@ -42,20 +42,17 @@ public class MemeEmojiKitchen : MemeService {
                 try {
                     download(
                         urlString = "https://github.com/UCYT5040/Google-Sticker-Mashup-Research/raw/main/image_urls.json",
-                        folder
+                        folder = folder
                     )
                 } catch (_: Exception) {
                     data.delete()
                     download(
                         urlString = "https://raw.fastgit.org/UCYT5040/Google-Sticker-Mashup-Research/main/image_urls.json",
-                        folder
+                        folder = folder
                     )
                 }.renameTo(data)
             }
-            kitchen = data.inputStream().use { stream ->
-                @OptIn(ExperimentalSerializationApi::class)
-                EmojiKitchen(urls = Json.decodeFromStream<HashMap<String, String>>(stream))
-            }
+            kitchen = EmojiKitchen(urls = Json.decodeFromString<HashMap<String, String>>(data.readText()))
         }
     }
 

@@ -60,7 +60,7 @@ public class MemeBiliBiliEmote : MemeService {
         return buildMessageChain {
             for (emote in emotes) {
                 val file = folder.resolve(emote.url.substringAfterLast('/')).takeIf { it.exists() }
-                        ?: download(urlString = emote.url, folder = folder)
+                    ?: download(urlString = emote.url, folder = folder)
                 +file.uploadAsImage(contact = subject)
             }
         }

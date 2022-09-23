@@ -33,6 +33,7 @@ public class MemeChoYen : MemeService {
     override fun enable(permission: Permission) {
         this.permission = permission
     }
+
     override fun disable() {}
 
     override suspend fun MessageEvent.replier(match: MatchResult): Image {

@@ -22,7 +22,7 @@ public class MemeRecord : MemeService {
     override val id: String = "record"
     override val description: String = "从群聊记录里获得表情包"
     override var loaded: Boolean = true
-    override var regex: Regex = """^#群友表情\s(.*)|#([^#\s]+)#""".toRegex()
+    override var regex: Regex = """^#群友表情\s*(.*)|#([^#\s]+)#""".toRegex()
         private set
     override val properties: Properties = Properties().apply { put("regex", regex.pattern) }
     override lateinit var permission: Permission
