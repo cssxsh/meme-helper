@@ -75,6 +75,19 @@ public class MemeYgo : MemeService {
 
     override fun disable() {}
 
+    private fun MutableList<String>.push(key: String): String? {
+        var temp: String? = null
+        removeAll { line ->
+            if (line.startsWith(key) && line.getOrNull(key.length) == '=') {
+                temp = line
+                true
+            } else {
+                false
+            }
+        }
+        return temp?.removePrefix(key)?.removePrefix("=")
+    }
+
     override suspend fun MessageEvent.replier(match: MatchResult): Image {
         val id = match.groups[2]?.value?.toLongOrNull()
             ?: message.findIsInstance<At>()?.target
@@ -90,67 +103,21 @@ public class MemeYgo : MemeService {
         val profile = (member ?: sender).queryProfile()
         // XXX: handle command
         lines.removeAll { it.startsWith('#') }
-        val name = when {
-            lines.any { it.startsWith(prefix = "name=") } -> {
-                val line = lines.first { it.startsWith(prefix = "name=") }
-                lines.remove(element = line)
-                line.removePrefix(prefix = "name=")
-            }
-            member != null -> member.remarkOrNameCardOrNick
-            else -> sender.nameCardOrNick
-        }
-        val attribute = when {
-            lines.any { it.startsWith(prefix = "attr=") } -> {
-                val line = lines.first { it.startsWith(prefix = "attr=") }
-                lines.remove(element = line)
-                line.removePrefix(prefix = "attr=").let { YgoCard.Attribute.valueOf(it) }
-            }
-            else -> YgoCard.Attribute.monster.random()
-        }
-        val level = when {
-            lines.any { it.startsWith(prefix = "level=") } -> {
-                val line = lines.first { it.startsWith(prefix = "level=") }
-                lines.remove(element = line)
-                line.removePrefix(prefix = "level=").toInt()
-            }
-            else -> profile.qLevel / 16 + 1
-        }
-        val race = when {
-            lines.any { it.startsWith(prefix = "race=") } -> {
-                val line = lines.first { it.startsWith(prefix = "race=") }
-                lines.remove(element = line)
-                line.removePrefix(prefix = "race=").split(',', ' ', '/')
-            }
-            else -> listOfNotNull(
-                member?.specialTitle?.takeUnless { it.isBlank() },
-                member?.permission?.name,
-                profile.sex.name
-            )
-        }
-        val attack = when {
-            lines.any { it.startsWith(prefix = "atk=") } -> {
-                val line = lines.first { it.startsWith(prefix = "atk=") }
-                lines.remove(element = line)
-                line.removePrefix(prefix = "atk=")
-            }
-            else -> "0"
-        }
-        val defend = when {
-            lines.any { it.startsWith(prefix = "def=") } -> {
-                val line = lines.first { it.startsWith(prefix = "def=") }
-                lines.remove(element = line)
-                line.removePrefix(prefix = "def=")
-            }
-            else -> "0"
-        }
-        val copyright = when {
-            lines.any { it.startsWith(prefix = "copyright=") } -> {
-                val line = lines.first { it.startsWith(prefix = "copyright=") }
-                lines.remove(element = line)
-                line.removePrefix(prefix = "copyright=")
-            }
-            else -> null
-        }
+        val name = lines.push(key = "name")
+            ?: member?.remarkOrNameCardOrNick
+            ?: sender.nameCardOrNick
+        val attribute = lines.push(key = "attr")
+            ?.let { YgoCard.Attribute.valueOf(it) }
+            ?: YgoCard.Attribute.monster.random()
+        val level = lines.push(key = "level")?.toInt() ?: (profile.qLevel / 16 + 1)
+        val race = lines.push(key = "race")?.split(',', ' ', '/') ?: listOfNotNull(
+            member?.specialTitle?.takeUnless { it.isBlank() },
+            member?.permission?.name,
+            profile.sex.name
+        )
+        val attack = lines.push(key = "atk") ?: "0"
+        val defend = lines.push(key = "def") ?: "0"
+        val copyright = lines.push(key = "copyright")
         val description = when {
             lines.isNotEmpty() -> lines.joinToString(separator = "\n")
             else -> profile.sign

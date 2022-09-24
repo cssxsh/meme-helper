@@ -8,8 +8,8 @@ import net.mamoe.mirai.console.permission.*
 import net.mamoe.mirai.event.events.*
 import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.message.data.Image.Key.isUploaded
+import net.mamoe.mirai.utils.*
 import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
-import net.mamoe.mirai.utils.info
 import xyz.cssxsh.mirai.hibernate.*
 import xyz.cssxsh.mirai.hibernate.entry.*
 import xyz.cssxsh.mirai.meme.*
