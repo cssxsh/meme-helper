@@ -115,3 +115,15 @@ Google Emoji Kitchen，两个 emoji 合成 一个
 
 示例: `😍+🥵`  
 ![u1f60d_u1f975.png](https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f60d/u1f60d_u1f975.png)
+
+
+### 幻影坦克
+
+需要 `mirai-skia-plugin` 版本 `1.1.9+`
+
+```
+#tank
+[图片]
+[图片]
+```
+![tank](example/tank.png)
