@@ -18,12 +18,11 @@ import org.jetbrains.skia.Image as SkiaImage
 import xyz.cssxsh.mirai.meme.service.*
 import java.io.File
 import java.time.*
-import java.util.*
 
 internal val logger by lazy {
     try {
         MemeHelperPlugin.logger
-    } catch (_: Throwable) {
+    } catch (_: ExceptionInInitializerError) {
         MiraiLogger.Factory.create(MemeHelper::class)
     }
 }
@@ -71,14 +70,14 @@ public suspend fun cache(image: Image): SkiaImage {
     val md5 = image.md5.toUHexString(separator = "")
     val cache = imageFolder.listFiles { file -> file.name.startsWith(prefix = md5) }?.firstOrNull()
         ?: http.prepareGet(image.queryUrl()).execute { response ->
-        val file = imageFolder.resolve("${md5}.${response.contentType()?.contentSubtype}")
-        file.outputStream().use { output ->
-            val channel = response.bodyAsChannel()
+            val file = imageFolder.resolve("${md5}.${response.contentType()?.contentSubtype}")
+            file.outputStream().use { output ->
+                val channel = response.bodyAsChannel()
 
-            while (!channel.isClosedForRead) channel.copyTo(output)
+                while (!channel.isClosedForRead) channel.copyTo(output)
+            }
+            file
         }
-        file
-    }
 
     return SkiaImage.makeFromEncoded(bytes = cache.readBytes())
 }
@@ -108,29 +107,24 @@ internal suspend fun download(urlString: String, folder: File): File = superviso
 
 internal fun JvmPlugin.loadMemeService() {
     MemeService.coroutineContext = coroutineContext + CoroutineName("MemeServiceLoader") + Dispatchers.IO
-    val services = sequence<MemeService> {
-        val oc = Thread.currentThread().contextClassLoader
-
-        @OptIn(MiraiInternalApi::class)
+    @OptIn(MiraiInternalApi::class)
+    @Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE")
+    val services: Sequence<MemeService> = sequence {
         for (classLoader in MemeHelperPlugin.loader.classLoaders) {
-            Thread.currentThread().contextClassLoader = classLoader
             try {
-                for (provider in ServiceLoader.load(MemeService::class.java, classLoader).stream()) {
-                    try {
-                        val service = provider.type().kotlin.objectInstance ?: provider.get()
+                with(net.mamoe.mirai.console.internal.util.PluginServiceHelper) {
+                    val services = classLoader.findServices<MemeService>().loadAllServices()
+                    for (service in services) {
                         if (MemeService[service.id] != null) {
-                            logger.verbose { "${service.id} 加载重复" }
+                            logger.warning { "${service.id} 加载重复" }
                             continue
                         }
 
                         yield(service)
-                    } catch (cause: Throwable) {
-                        logger.warning({ "${provider.type().name} 加载失败" }, cause)
-                        continue
                     }
                 }
-            } finally {
-                Thread.currentThread().contextClassLoader = oc
+            } catch (cause: Exception) {
+                logger.warning({ "MemeService 加载失败" }, cause)
             }
         }
     }

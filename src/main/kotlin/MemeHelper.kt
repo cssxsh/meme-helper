@@ -14,6 +14,7 @@ public object MemeHelper : SimpleListenerHost() {
 
     @EventHandler
     public suspend fun MessageEvent.handle() {
+        if (this is MessageSyncEvent) return
         for (service in MemeService) {
             if (!service.loaded) continue
             try {

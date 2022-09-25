@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "xyz.cssxsh"
-version = "1.1.3"
+version = "1.1.4"
 
 repositories {
     mavenLocal()
@@ -20,17 +20,17 @@ mavenCentralPublish {
     singleDevGithubProject("cssxsh", "meme-helper")
     licenseFromGitHubProject("AGPL-3.0")
     workingDir = System.getenv("PUBLICATION_TEMP")?.let { file(it).resolve(projectName) }
-        ?: project.buildDir.resolve("publishing-tmp")
+        ?: buildDir.resolve("publishing-tmp")
     publication {
-        artifact(tasks.getByName("buildPlugin"))
+        artifact(tasks["buildPlugin"])
     }
 }
 
 dependencies {
-    compileOnly("xyz.cssxsh.mirai:mirai-hibernate-plugin:2.4.3")
-    compileOnly("xyz.cssxsh.mirai:mirai-skia-plugin:1.1.7")
+    compileOnly("xyz.cssxsh.mirai:mirai-hibernate-plugin:2.4.4")
+    compileOnly("xyz.cssxsh.mirai:mirai-skia-plugin:1.1.9")
     compileOnly("xyz.cssxsh:weibo-helper:1.5.5")
-    compileOnly("xyz.cssxsh:bilibili-helper:1.6.3")
+    compileOnly("xyz.cssxsh:bilibili-helper:1.6.5")
     compileOnly("net.mamoe:mirai-core-utils:2.13.0-M1")
     compileOnly("net.mamoe:mirai-core:2.13.0-M1")
     implementation("io.ktor:ktor-client-okhttp:2.1.1") {
@@ -50,7 +50,9 @@ dependencies {
     }
     // Test
     testImplementation(kotlin("test"))
-    testImplementation("xyz.cssxsh.mirai:mirai-skia-plugin:1.1.7")
+    testImplementation("xyz.cssxsh.mirai:mirai-skia-plugin:1.1.9")
+    testImplementation("org.slf4j:slf4j-simple:2.0.0")
+    testImplementation("net.mamoe:mirai-logging-slf4j:2.13.0-M1")
     testImplementation("net.mamoe:mirai-core-utils:2.13.0-M1")
 }
 
