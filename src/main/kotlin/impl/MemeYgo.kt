@@ -98,10 +98,10 @@ public class MemeYgo : MemeService {
             else -> avatar(id = id, size = 640)
         }
         val lines = message.filterIsInstance<PlainText>().last().content
+            .removePrefix("\n")
             .lineSequence().toMutableList()
         val member = (subject as? Group)?.get(id = id)
         val profile = (member ?: sender).queryProfile()
-        // XXX: handle command
         lines.removeAll { it.startsWith('#') }
         val name = lines.push(key = "name")
             ?: member?.remarkOrNameCardOrNick
