@@ -98,7 +98,7 @@ public class MemeYgo : MemeService {
             else -> avatar(id = id, size = 640)
         }
         val lines = message.filterIsInstance<PlainText>().last().content
-            .removePrefix("\n")
+            .removePrefix(" \n")
             .lineSequence().toMutableList()
         val member = (subject as? Group)?.get(id = id)
         val profile = (member ?: sender).queryProfile()
