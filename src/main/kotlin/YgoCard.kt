@@ -166,7 +166,8 @@ public sealed class YgoCard {
         val style = ParagraphStyle().apply {
             maxLinesCount = 1
             alignment = Alignment.RIGHT
-            textStyle = TextStyle().setFontSize(18F).setColor(Color.BLACK).setFontFamilies(arrayOf("FOT-Rodin Pro"))
+            textStyle = TextStyle().setFontSize(18F).setColor(Color.BLACK)
+                .setFontFamilies(arrayOf("FOT-Rodin Pro"))
         }
         val text = this.copyright ?: when (locale) {
             Locale.JAPAN -> "ⓒスタジオ·ダイス /集英社·テレビ東京·KONAMI"
@@ -198,7 +199,7 @@ public sealed class YgoCard {
             is Trap -> project.resolve("source/mold/frame/trap.jpg")
             is Monster -> project.resolve("source/mold/frame/monster_xg.jpg")
         }
-        surface.writePixels(Bitmap.makeFromImage(Image.makeFromEncoded(frame.readBytes())), 0, 0)
+        canvas.drawImage(Image.makeFromEncoded(frame.readBytes()), 0F, 0F)
 
         // draw name
         name().layout(615F).paint(canvas, 65F, 63F)

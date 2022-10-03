@@ -26,7 +26,7 @@ public class MemeEmojiKitchen : MemeService {
     override val properties: Properties = Properties()
     override lateinit var permission: Permission
     private var kitchen: EmojiKitchen = EmojiKitchen(urls = emptyMap())
-    private var folder: File = File(System.getProperty("user.dir") ?: ".").resolve(".emoji")
+    private var folder: File = File(System.getProperty("user.dir", ".")).resolve(".emoji")
     private lateinit var loadJob: Job
 
     override fun load(folder: File) {

@@ -26,7 +26,7 @@ public class MemeRecord : MemeService {
         private set
     override val properties: Properties = Properties().apply { put("regex", regex.pattern) }
     override lateinit var permission: Permission
-    private var folder: File = File(System.getProperty("user.dir") ?: ".").resolve(".record")
+    private var folder: File = File(System.getProperty("user.dir", ".")).resolve(".record")
 
     private suspend fun FaceRecord.download(): File {
         return folder.listFiles { file -> file.name.startsWith(md5) }?.firstOrNull()
@@ -62,12 +62,12 @@ public class MemeRecord : MemeService {
 
     override fun disable() {}
 
-    override suspend fun MessageEvent.replier(match: MatchResult): MessageContent {
+    override suspend fun MessageEvent.replier(match: MatchResult): MessageContent? {
         val tag = match.groupValues.last { it.isNotEmpty() }
         val record = if (tag.startsWith('#')) {
             FaceRecord.random()
         } else {
-            FaceRecord.match(tag = tag).randomOrNull() ?: return "查找失败 <${tag}>".toPlainText()
+            FaceRecord.match(tag = tag).randomOrNull() ?: return null
         }
         val message = record.toMessageContent()
         if (message is Image && message.isUploaded(bot).not()) {

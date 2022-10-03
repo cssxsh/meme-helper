@@ -19,7 +19,7 @@ public class MemeBiliBiliEmote : MemeService {
         private set
     override val properties: Properties = Properties().apply { put("regex", regex.pattern) }
     override lateinit var permission: Permission
-    private var folder: File = File(System.getProperty("user.dir") ?: ".").resolve(".bilibili")
+    private var folder: File = File(System.getProperty("user.dir", ".")).resolve(".bilibili")
 
     override fun load(folder: File) {
         this.folder = folder
@@ -29,7 +29,7 @@ public class MemeBiliBiliEmote : MemeService {
             else -> {}
         }
         loaded = try {
-            BiliEmoteData
+            BiliEmoteData.dynamic
             true
         } catch (_: Throwable) {
             false

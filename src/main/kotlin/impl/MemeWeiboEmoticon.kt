@@ -19,7 +19,7 @@ public class MemeWeiboEmoticon : MemeService {
         private set
     override val properties: Properties = Properties().apply { put("regex", regex.pattern) }
     override lateinit var permission: Permission
-    private var folder: File = File(System.getProperty("user.dir") ?: ".").resolve(".weibo")
+    private var folder: File = File(System.getProperty("user.dir", ".")).resolve(".weibo")
 
     override fun load(folder: File) {
         this.folder = folder
