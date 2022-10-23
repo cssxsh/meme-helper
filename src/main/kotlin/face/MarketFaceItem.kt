@@ -1,7 +1,6 @@
 package xyz.cssxsh.mirai.meme.face
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
 
 @Serializable
 public data class MarketFaceItem(
@@ -17,4 +16,6 @@ public data class MarketFaceItem(
     val name: String,
     @SerialName("thumbImg")
     val thumb: String
-)
+) {
+    public val url: String by lazy { "https://zb.vip.qq.com/hybrid/emoticonmall/detail?id=${itemId}" }
+}
