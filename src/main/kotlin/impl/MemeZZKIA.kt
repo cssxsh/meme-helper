@@ -33,6 +33,12 @@ public class MemeZZKIA : MemeService {
             else -> {}
         }
         loadJob = MemeService.launch {
+            try {
+                @Suppress("INVISIBLE_MEMBER")
+                MiraiSkiaPlugin.loadJob.join()
+            } catch (_: NoSuchMethodError) {
+                //
+            }
             val zzkia = folder.resolve("zzkia.jpg")
             if (zzkia.exists().not()) {
                 try {
