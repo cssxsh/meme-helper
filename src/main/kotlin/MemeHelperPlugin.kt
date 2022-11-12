@@ -1,6 +1,7 @@
 package xyz.cssxsh.mirai.meme
 
-import net.mamoe.mirai.console.MiraiConsole
+import kotlinx.coroutines.*
+import net.mamoe.mirai.console.*
 import net.mamoe.mirai.console.extension.*
 import net.mamoe.mirai.console.plugin.jvm.*
 import net.mamoe.mirai.console.plugin.*
@@ -11,7 +12,7 @@ public object MemeHelperPlugin : KotlinPlugin(
     JvmPluginDescription(
         id = "xyz.cssxsh.mirai.plugin.meme-helper",
         name = "meme-helper",
-        version = "1.1.4",
+        version = "1.1.5",
     ) {
         author("cssxsh")
         dependsOn("xyz.cssxsh.mirai.plugin.mirai-skia-plugin", ">= 1.1.0", false)
@@ -37,7 +38,7 @@ public object MemeHelperPlugin : KotlinPlugin(
     }
 
     override fun onDisable() {
-        MemeHelper.cancelAll()
+        MemeHelper.cancel()
         disableMemeService()
     }
 }

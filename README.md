@@ -3,13 +3,13 @@
 > 基于 [Mirai Console](https://github.com/mamoe/mirai-console) 的 MEME 生成插件
 > 
 [![Release](https://img.shields.io/github/v/release/cssxsh/meme-helper)](https://github.com/cssxsh/meme-helper/releases)
-[![Downloads](https://img.shields.io/github/downloads/cssxsh/meme-helper/total)](https://shields.io/category/downloads)
+[![Downloads](https://img.shields.io/github/downloads/cssxsh/meme-helper/total)](https://repo1.maven.org/maven2/xyz/cssxsh/meme-helper/)
 [![MiraiForum](https://img.shields.io/badge/post-on%20MiraiForum-yellow)](https://mirai.mamoe.net/topic/1271)
 
 **使用前应该查阅的相关文档或项目**
 
-* [User Manual](https://github.com/mamoe/mirai/blob/dev/docs/UserManual.md)
-* [Permission Command](https://github.com/mamoe/mirai/blob/dev/mirai-console/docs/BuiltInCommands.md#permissioncommand)
+*   [User Manual](https://github.com/mamoe/mirai/blob/dev/docs/UserManual.md)
+*   [Permission Command](https://github.com/mamoe/mirai/blob/dev/mirai-console/docs/BuiltInCommands.md#permissioncommand)
 
 插件权限ID `xyz.cssxsh.mirai.plugin.meme-helper:*`，使用前授予权限
 
@@ -22,12 +22,12 @@
 
 ### MCL 指令安装
 
-`./mcl --update-package xyz.cssxsh:meme-helper --channel stable --type plugin`
+`./mcl --update-package xyz.cssxsh:meme-helper --channel maven-stable --type plugin`
 
 ### 手动安装
 
-1. 运行 [Mirai Console](https://github.com/mamoe/mirai-console) 生成`plugins`文件夹
-2. 从 [Releases](https://github.com/cssxsh/meme-helper/releases) 下载`jar`并将其放入`plugins`文件夹中
+1.  从 [Releases](https://github.com/cssxsh/meme-helper/releases) 或者 [Maven](https://repo1.maven.org/maven2/xyz/cssxsh/meme-helper/) 下载 `mirai2.jar`
+2.  将其放入 `plugins` 文件夹中
 
 ## 基本功能
 
@@ -73,13 +73,13 @@ PornHub Login 生成
 游戏王 表情包生成
 可以发送 `图片` 或者 `@某人` 或者 `QQ号` 确定卡片图片  
 可以使用 `xxx=yyy`, 指定属性，可选属性有：
-* 卡片名称: `name`
-* 怪兽属性: `attr` = `dark, divine, earth, fire, light, spell, trap, water, wind`
-* 怪兽等级: `level`
-* 怪兽种族: `race`
-* 怪兽攻击: `atk`
-* 怪兽防御: `def`
-* 卡片版权：`copyright`
+*   卡片名称: `name`
+*   怪兽属性: `attr` = `dark, divine, earth, fire, light, spell, trap, water, wind`
+*   怪兽等级: `level`
+*   怪兽种族: `race`
+*   怪兽攻击: `atk`
+*   怪兽防御: `def`
+*   卡片版权：`copyright`
 
 示例: 
 ```
