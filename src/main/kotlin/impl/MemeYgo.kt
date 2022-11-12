@@ -39,10 +39,10 @@ public class MemeYgo : MemeService {
             val ygo = folder.resolve("ygo-card-master")
             if (ygo.exists().not()) {
                 val file = try {
-                    download(urlString = "https://github.com/ymssx/ygo-card/archive/refs/heads/master.zip", folder)
+                    download(urlString = "https://download.fastgit.org/ymssx/ygo-card/archive/master.zip", folder)
                 } catch (_: Exception) {
                     folder.resolve("ygo-card-master.zip").delete()
-                    download(urlString = "https://download.fastgit.org/ymssx/ygo-card/archive/master.zip", folder)
+                    download(urlString = "https://github.com/ymssx/ygo-card/archive/refs/heads/master.zip", folder)
                 }
                 runInterruptible(Dispatchers.IO) {
                     ZipFile(file).use { zip ->
