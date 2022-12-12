@@ -42,7 +42,7 @@ public class MemeZZKIA : MemeService {
             val zzkia = folder.resolve("zzkia.jpg")
             if (zzkia.exists().not()) {
                 try {
-                    download(urlString = "https://github.com/dcalsky/bbq/raw/master/zzkia/images/4.jpg", folder)
+                    download(urlString = "https://raw.githubusercontent.com/dcalsky/bbq/master/zzkia/images/4.jpg", folder)
                 } catch (_: Exception) {
                     download(urlString = "https://tvax2.sinaimg.cn/large/d6ca1528gy1h2ur64giqmj20yi0v3q52.jpg", folder)
                 }.renameTo(zzkia)
@@ -51,7 +51,7 @@ public class MemeZZKIA : MemeService {
             val fzxs14 = folder.resolve("FZXS14-ex.ttf")
             if (fzxs14.exists().not()) {
                 try {
-                    download(urlString = "https://github.com/dcalsky/bbq/raw/master/fonts/FZXS14-ex.ttf", folder)
+                    download(urlString = "https://raw.githubusercontent.com/dcalsky/bbq/master/fonts/FZXS14-ex.ttf", folder)
                 } catch (_: Exception) {
                     fzxs14.delete()
                     download(urlString = "https://font.taofont.com/en_fonts/fonts/f/FZXS14.ttf", folder)
