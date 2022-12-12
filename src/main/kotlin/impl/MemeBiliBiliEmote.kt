@@ -7,7 +7,7 @@ import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import xyz.cssxsh.mirai.bilibili.data.*
 import xyz.cssxsh.mirai.meme.*
 import xyz.cssxsh.mirai.meme.service.*
-import java.io.File
+import java.io.*
 import java.util.*
 
 public class MemeBiliBiliEmote : MemeService {

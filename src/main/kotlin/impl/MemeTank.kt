@@ -8,7 +8,7 @@ import xyz.cssxsh.mirai.meme.cache
 import xyz.cssxsh.mirai.meme.service.*
 import xyz.cssxsh.mirai.skia.*
 import xyz.cssxsh.skia.*
-import java.io.File
+import java.io.*
 import java.util.*
 
 /**

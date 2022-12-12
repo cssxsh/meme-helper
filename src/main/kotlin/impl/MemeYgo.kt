@@ -8,7 +8,7 @@ import net.mamoe.mirai.message.data.*
 import xyz.cssxsh.mirai.meme.*
 import xyz.cssxsh.mirai.meme.service.*
 import xyz.cssxsh.mirai.skia.*
-import java.io.File
+import java.io.*
 import java.util.*
 import java.util.zip.*
 

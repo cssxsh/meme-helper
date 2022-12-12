@@ -9,7 +9,7 @@ import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import xyz.cssxsh.mirai.meme.*
 import xyz.cssxsh.mirai.meme.service.*
-import java.io.File
+import java.io.*
 import java.time.*
 import java.util.*
 import kotlin.collections.*

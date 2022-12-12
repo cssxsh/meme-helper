@@ -14,7 +14,7 @@ import xyz.cssxsh.mirai.hibernate.*
 import xyz.cssxsh.mirai.hibernate.entry.*
 import xyz.cssxsh.mirai.meme.*
 import xyz.cssxsh.mirai.meme.service.*
-import java.io.File
+import java.io.*
 import java.util.*
 
 public class MemeRecord : MemeService {
