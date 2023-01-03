@@ -106,8 +106,9 @@ public object MarketFaceHelper {
         val info = data.detail.base.single()
         val timestamp = requireNotNull(data.timestamp) { "Not Found Timestamp" } / 1_000
         val key = timestamp.toString().md5()
-            .toUHexString("", 0, 16)
-            .lowercase().toByteArray()
+            .toUHexString("")
+            .lowercase().substring(0, 16)
+            .toByteArray()
 
         return data.detail.md5.map { (md5, name) ->
             val delegate = ImMsgBody.MarketFace(
