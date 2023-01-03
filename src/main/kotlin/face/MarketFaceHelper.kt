@@ -8,6 +8,7 @@ import net.mamoe.mirai.*
 import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.utils.*
 import net.mamoe.mirai.internal.*
+import net.mamoe.mirai.internal.deps.okio.ByteString.Companion.decodeHex
 import net.mamoe.mirai.internal.network.*
 import net.mamoe.mirai.internal.message.data.*
 import net.mamoe.mirai.internal.network.protocol.data.proto.*
@@ -109,19 +110,20 @@ public object MarketFaceHelper {
             .toUHexString("")
             .lowercase().substring(0, 16)
             .toByteArray()
+        val default = "0A 06 08 AC 02 10 AC 02 0A 06 08 C8 01 10 C8 01 40 01".hexToBytes()
 
         return data.detail.md5.map { (md5, name) ->
             val delegate = ImMsgBody.MarketFace(
                 faceName = "[$name]".toByteArray(),
                 itemType = 6,
-                faceInfo = info.type,
+                faceInfo = info.feeType,
                 faceId = md5.hexToBytes(),
                 tabId = itemId,
-                subType = info.ringType,
+                subType = info.type,
                 key = key,
-                mediaType = 0,
                 imageWidth = 200,
-                imageHeight = 200
+                imageHeight = 200,
+                pbReserve = default
             )
 
             MarketFaceImpl(delegate = delegate)
