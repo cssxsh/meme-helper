@@ -8,21 +8,31 @@ import net.mamoe.mirai.*
 import net.mamoe.mirai.message.data.*
 import net.mamoe.mirai.utils.*
 import net.mamoe.mirai.internal.*
-import net.mamoe.mirai.internal.deps.okio.ByteString.Companion.decodeHex
 import net.mamoe.mirai.internal.network.*
 import net.mamoe.mirai.internal.message.data.*
 import net.mamoe.mirai.internal.network.protocol.data.proto.*
 import xyz.cssxsh.mirai.meme.*
+import java.util.*
 
 @MiraiExperimentalApi
 @Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE")
 public object MarketFaceHelper {
+    @PublishedApi
     internal val json: Json = Json {
         isLenient = true
         ignoreUnknownKeys = true
     }
+    @PublishedApi
+    internal val authors: MutableMap<Long, AuthorDetail> = WeakHashMap()
+    @PublishedApi
+    internal val relations: MutableMap<Int, RelationIdInfo> = WeakHashMap()
+    @PublishedApi
+    internal val faces: MutableMap<Int, MarketFaceData> = WeakHashMap()
 
     public suspend fun queryAuthorDetail(authorId: Long): AuthorDetail {
+        val cache = authors[authorId]
+        if (cache != null) return cache
+
         val bot = Bot.instances.randomOrNull() ?: throw IllegalStateException("No Bot Instance")
         bot as QQAndroidBot
         val text = http.get("https://open.vip.qq.com/open/getAuthorDetail") {
@@ -42,10 +52,15 @@ public object MarketFaceHelper {
 
         check(result.ret == 0) { result.msg }
 
-        return json.decodeFromJsonElement(AuthorDetail.serializer(), result.data)
+        val detail = json.decodeFromJsonElement(AuthorDetail.serializer(), result.data)
+        authors[authorId] = detail
+        return detail
     }
 
     public suspend fun queryRelationId(itemId: Int): RelationIdInfo {
+        val cache = relations[itemId]
+        if (cache != null) return cache
+
         val bot = Bot.instances.randomOrNull() ?: throw IllegalStateException("No Bot Instance")
         bot as QQAndroidBot
         val text = http.get("https://open.vip.qq.com/open/getRelationId") {
@@ -65,20 +80,26 @@ public object MarketFaceHelper {
         val result = Json.decodeFromString(Restful.serializer(), text)
 
         check(result.ret == 0) { result.msg }
-
-        return json.decodeFromJsonElement(RelationIdInfo.serializer(), result.data)
+        val info = json.decodeFromJsonElement(RelationIdInfo.serializer(), result.data)
+        relations[itemId] = info
+        return info
     }
 
     public suspend fun queryRelationId(face: MarketFace): RelationIdInfo = queryRelationId(itemId = face.id)
 
     public suspend fun queryFaceDetail(itemId: Int): MarketFaceData {
+        val cache = faces[itemId]
+        if (cache != null) return cache
+
         val text = http.get("https://gxh.vip.qq.com/qqshow/admindata/comdata/vipEmoji_item_209583/xydata.json") {
             url {
                 encodedPath = encodedPath.replace("209583", itemId.toString())
             }
         }.bodyAsText()
 
-        return json.decodeFromString(MarketFaceData.serializer(), text)
+        val data = json.decodeFromString(MarketFaceData.serializer(), text)
+        faces[itemId] = data
+        return data
     }
 
     public suspend fun queryFaceDetail(face: MarketFace): MarketFaceData = queryFaceDetail(itemId = face.id)
