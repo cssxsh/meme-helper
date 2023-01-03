@@ -130,4 +130,4 @@ Google Emoji Kitchen，两个 emoji 合成 一个
 
 ## [爱发电](https://afdian.net/@cssxsh)
 
-![afdian](example/sponsor/afdian.jpg)
+![afdian](.github/afdian.jpg)
