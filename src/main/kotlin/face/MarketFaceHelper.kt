@@ -1,5 +1,6 @@
 package xyz.cssxsh.mirai.meme.face
 
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -11,6 +12,7 @@ import net.mamoe.mirai.internal.*
 import net.mamoe.mirai.internal.network.*
 import net.mamoe.mirai.internal.message.data.*
 import net.mamoe.mirai.internal.network.protocol.data.proto.*
+import net.mamoe.mirai.internal.utils.crypto.*
 import xyz.cssxsh.mirai.meme.*
 import java.util.*
 
@@ -25,9 +27,17 @@ public object MarketFaceHelper {
     @PublishedApi
     internal val authors: MutableMap<Long, AuthorDetail> = WeakHashMap()
     @PublishedApi
+    internal val suppliers: MutableMap<Long, SupplierInfo> = WeakHashMap()
+    @PublishedApi
     internal val relations: MutableMap<Int, RelationIdInfo> = WeakHashMap()
     @PublishedApi
+    internal val items: MutableMap<Int, ItemData> = WeakHashMap()
+    @PublishedApi
     internal val faces: MutableMap<Int, MarketFaceData> = WeakHashMap()
+    @PublishedApi
+    internal val faces2: MutableMap<Int, MarketFaceAndroid> = WeakHashMap()
+    @PublishedApi
+    internal val defaultPbReserve: ByteArray = "0A 06 08 AC 02 10 AC 02 0A 06 08 C8 01 10 C8 01 40 01".hexToBytes()
 
     public suspend fun queryAuthorDetail(authorId: Long): AuthorDetail {
         val cache = authors[authorId]
@@ -40,7 +50,6 @@ public object MarketFaceHelper {
             parameter("g_tk", bot.client.wLoginSigInfo.bkn)
 
             headers {
-                // ktor bug
                 append(
                     "cookie",
                     "uin=o${bot.id}; skey=${bot.sKey}; p_uin=o${bot.id}; p_skey=${bot.psKey("vip.qq.com")};"
@@ -50,7 +59,7 @@ public object MarketFaceHelper {
 
         val result = Json.decodeFromString(Restful.serializer(), text)
 
-        check(result.ret == 0) { result.msg }
+        check(result.ret == 0) { result.message }
 
         val detail = json.decodeFromJsonElement(AuthorDetail.serializer(), result.data)
         authors[authorId] = detail
@@ -69,7 +78,6 @@ public object MarketFaceHelper {
             parameter("g_tk", bot.client.wLoginSigInfo.bkn)
 
             headers {
-                // ktor bug
                 append(
                     "cookie",
                     "uin=o${bot.id}; skey=${bot.sKey}; p_uin=o${bot.id}; p_skey=${bot.psKey("vip.qq.com")};"
@@ -79,7 +87,7 @@ public object MarketFaceHelper {
 
         val result = Json.decodeFromString(Restful.serializer(), text)
 
-        check(result.ret == 0) { result.msg }
+        check(result.ret == 0) { result.message }
         val info = json.decodeFromJsonElement(RelationIdInfo.serializer(), result.data)
         relations[itemId] = info
         return info
@@ -91,11 +99,8 @@ public object MarketFaceHelper {
         val cache = faces[itemId]
         if (cache != null) return cache
 
-        val text = http.get("https://gxh.vip.qq.com/qqshow/admindata/comdata/vipEmoji_item_209583/xydata.json") {
-            url {
-                encodedPath = encodedPath.replace("209583", itemId.toString())
-            }
-        }.bodyAsText()
+        val text = http.get("https://gxh.vip.qq.com/qqshow/admindata/comdata/vipEmoji_item_${itemId}/xydata.json")
+            .bodyAsText()
 
         val data = json.decodeFromString(MarketFaceData.serializer(), text)
         faces[itemId] = data
@@ -104,16 +109,32 @@ public object MarketFaceHelper {
 
     public suspend fun queryFaceDetail(face: MarketFace): MarketFaceData = queryFaceDetail(itemId = face.id)
 
-    public suspend fun queryItemData(appId: Int, itemId: Int): String {
+    public suspend fun queryFaceAndroid(itemId: Int): MarketFaceAndroid {
+        val cache = faces2[itemId]
+        if (cache != null) return cache
+
+        val text = http.get("https://gxh.vip.qq.com/club/item/parcel/${itemId % 10}/${itemId}_android.json")
+            .bodyAsText()
+
+        val data = json.decodeFromString(MarketFaceAndroid.serializer(), text)
+        faces2[itemId] = data
+        return data
+    }
+
+    public suspend fun queryFaceAndroid(face: MarketFace): MarketFaceAndroid = queryFaceAndroid(itemId = face.id)
+
+    public suspend fun queryItemData(itemId: Int): ItemData {
+        val cache = items[itemId]
+        if (cache != null) return cache
+
         val bot = Bot.instances.randomOrNull() ?: throw IllegalStateException("No Bot Instance")
         bot as QQAndroidBot
         val text = http.get("https://zb.vip.qq.com/v2/home/cgi/getItemData") {
-            parameter("bid", appId)
+            parameter("bid", 1)
             parameter("id", itemId)
             parameter("g_tk", bot.client.wLoginSigInfo.bkn)
 
             headers {
-                // ktor bug
                 append(
                     "cookie",
                     "uin=o${bot.id}; skey=${bot.sKey}; p_uin=o${bot.id}; p_skey=${bot.psKey("vip.qq.com")};"
@@ -121,7 +142,71 @@ public object MarketFaceHelper {
             }
         }.bodyAsText()
 
-        return text
+        val result = Json.decodeFromString(Restful.serializer(), text)
+
+        check(result.ret == 0) { result.message }
+        val data = json.decodeFromJsonElement(ItemData.serializer(), result.data)
+        items[itemId] = data
+        return data
+    }
+
+    public suspend fun queryItemData(face: MarketFace): ItemData = queryItemData(itemId = face.id)
+
+    public suspend fun querySupplierInfo(supplierId: Long, offset: Int): SupplierInfo {
+        val cache = suppliers[supplierId]
+        if (cache != null) return cache
+
+        val bot = Bot.instances.randomOrNull() ?: throw IllegalStateException("No Bot Instance")
+        bot as QQAndroidBot
+        val text = http.post {
+            url("https://zb.vip.qq.com/trpc-proxy/qc/supplyerservice/Supplyer/SupplyerInfo")
+
+            setBody(buildJsonObject {
+                putJsonObject("req") {
+                    put("supplyerid", supplierId)
+                    // offset
+                    put("nextID", offset)
+                    // page size
+                    put("Pagesize", 30)
+                    putJsonObject("stlogin") {
+                        put("ikeytype", 1)
+                        put("iKeyType", 1)
+                        put("iopplat", 2)
+                        put("iOpplat", 2)
+                        put("sClientIp", "")
+                        put("sclientver", "8.9.28")
+                        put("sClientVer", "8.9.28")
+                        put("skey", bot.sKey)
+                        put("sSkey", bot.sKey)
+                        put("lLoginInfo", "")
+                    }
+                }
+                putJsonObject("options") {
+                    putJsonObject("context") {
+                        put("businessType", "qqgxh")
+                    }
+                    putJsonObject("naming") {
+                        put("namespace", "Production")
+                        put("env", "formal")
+                    }
+                }
+            }.toString())
+            contentType(ContentType.Application.Json)
+
+            headers {
+                append(
+                    "cookie",
+                    "uin=o${bot.id}; skey=${bot.sKey}; p_uin=o${bot.id}; p_skey=${bot.psKey("vip.qq.com")};"
+                )
+            }
+        }.bodyAsText()
+
+        val result = Json.decodeFromString(Restful.serializer(), text)
+
+        check(result.ret == 0) { result.message }
+        val info = json.decodeFromJsonElement(SupplierInfo.serializer(), result.data)
+        suppliers[supplierId] = info
+        return info
     }
 
     public fun build(itemId: Int, data: MarketFaceData): List<MarketFace> {
@@ -131,7 +216,6 @@ public object MarketFaceHelper {
             .toUHexString("")
             .lowercase().substring(0, 16)
             .toByteArray()
-        val default = "0A 06 08 AC 02 10 AC 02 0A 06 08 C8 01 10 C8 01 40 01".hexToBytes()
 
         return data.detail.md5.map { (md5, name) ->
             val delegate = ImMsgBody.MarketFace(
@@ -144,10 +228,44 @@ public object MarketFaceHelper {
                 key = key,
                 imageWidth = 200,
                 imageHeight = 200,
-                pbReserve = default
+                pbReserve = defaultPbReserve
             )
 
             MarketFaceImpl(delegate = delegate)
         }
+    }
+
+    public fun build(data: MarketFaceAndroid): List<MarketFace> {
+        val key = data.updateTime.toString().md5()
+            .toUHexString("")
+            .lowercase().substring(0, 16)
+            .toByteArray()
+
+        return data.images.map { image ->
+            val delegate = ImMsgBody.MarketFace(
+                faceName = "[${image.name}]".toByteArray(),
+                itemType = 6,
+                faceInfo = data.feeType.toInt(),
+                faceId = image.id.hexToBytes(),
+                tabId = data.id.toInt(),
+                subType = data.type,
+                key = key,
+                imageWidth = 200,
+                imageHeight = 200,
+                pbReserve = defaultPbReserve
+            )
+
+            MarketFaceImpl(delegate = delegate)
+        }
+    }
+
+    public suspend fun source(impl: MarketFace): ByteArray {
+        impl as MarketFaceImpl
+        val md5 = impl.delegate.faceId.toUHexString("").lowercase()
+
+        val source = http.get("https://gxh.vip.qq.com/club/item/parcel/item/${md5.substring(0, 2)}/${md5}/300_300")
+            .body<ByteArray>()
+
+        return TEA.decrypt(source, impl.delegate.key)
     }
 }

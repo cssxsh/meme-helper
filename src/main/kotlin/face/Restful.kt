@@ -4,11 +4,14 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 @Serializable
+@OptIn(ExperimentalSerializationApi::class)
 internal data class Restful(
-    @SerialName("data")
-    val `data`: JsonElement,
-    @SerialName("msg")
-    val msg: String,
-    @SerialName("ret")
-    val ret: Int
+    @JsonNames("data", "response")
+    val data: JsonElement = JsonNull,
+    @JsonNames("msg", "message")
+    val message: String = "",
+    @JsonNames("ret", "retCode")
+    val ret: Int = 0,
+    @SerialName("code")
+    val code: Int = 200
 )

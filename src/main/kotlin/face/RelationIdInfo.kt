@@ -11,5 +11,5 @@ public data class RelationIdInfo(
     @SerialName("authorName")
     val name: String,
     @SerialName("openItemId")
-    val openItemId: Long
+    val itemId: Int
 )

@@ -6,14 +6,20 @@ import kotlinx.serialization.*
 public data class OperationInfo(
     @SerialName("isFree")
     @Serializable(with = NumberToBooleanSerializer::class)
-    val isFree: Boolean,
+    val isFree: Boolean = true,
     @SerialName("isShow")
     @Serializable(with = NumberToBooleanSerializer::class)
-    val isShow: Boolean,
+    val isShow: Boolean = true,
+    @SerialName("limitBeginTime")
+    val limitBeginTime: String = "",
+    @SerialName("limitEndTime")
+    val limitEndTime: String = "",
     @SerialName("limitFreeBeginTime")
-    val limitFreeBeginTime: String,
+    val limitFreeBeginTime: String = "",
     @SerialName("limitFreeEndTime")
-    val limitFreeEndTime: String,
+    val limitFreeEndTime: String = "",
+    @SerialName("limitType")
+    val limitType: Int = 0,
     @SerialName("maxVersion")
     val maxVersion: String,
     @SerialName("minVersion")
@@ -21,14 +27,14 @@ public data class OperationInfo(
     @SerialName("platform")
     val platform: Int,
     @SerialName("price")
-    val price: Double,
+    val price: Double = 0.0,
     @SerialName("productId")
-    internal val productId: String,
+    val productId: String = "",
     @SerialName("valid")
     @Serializable(with = NumberToBooleanSerializer::class)
-    val valid: Boolean,
+    val valid: Boolean = true,
     @SerialName("validity")
-    val validity: Int,
+    val validity: Int = 0,
     @SerialName("whiteList")
     internal val white: String = "",
     @SerialName("__v")
