@@ -12,7 +12,6 @@ import net.mamoe.mirai.internal.*
 import net.mamoe.mirai.internal.network.*
 import net.mamoe.mirai.internal.message.data.*
 import net.mamoe.mirai.internal.network.protocol.data.proto.*
-import net.mamoe.mirai.internal.utils.crypto.*
 import xyz.cssxsh.mirai.meme.*
 import java.util.*
 
@@ -250,8 +249,8 @@ public object MarketFaceHelper {
                 tabId = data.id.toInt(),
                 subType = data.type,
                 key = key,
-                imageWidth = 200,
-                imageHeight = 200,
+                imageWidth = image.width,
+                imageHeight = image.height,
                 pbReserve = defaultPbReserve
             )
 
@@ -262,10 +261,14 @@ public object MarketFaceHelper {
     public suspend fun source(impl: MarketFace): ByteArray {
         impl as MarketFaceImpl
         val md5 = impl.delegate.faceId.toUHexString("").lowercase()
+        val size = if (impl.delegate.tabId < 10_0000) 200 else 300
+        val url = when (impl.delegate.subType) {
+            1 -> "https://gxh.vip.qq.com/club/item/parcel/item/${md5.substring(0, 2)}/$md5/raw${size}.gif"
+            2 -> "https://gxh.vip.qq.com/club/item/parcel/item/${md5.substring(0, 2)}/$md5/raw${size}.png"
+            3 -> "https://gxh.vip.qq.com/club/item/parcel/item/${md5.substring(0, 2)}/$md5/raw${size}.gif"
+            else -> "https://gxh.vip.qq.com/club/item/parcel/item/${md5.substring(0, 2)}/$md5/${size}x${size}.png"
+        }
 
-        val source = http.get("https://gxh.vip.qq.com/club/item/parcel/item/${md5.substring(0, 2)}/${md5}/300_300")
-            .body<ByteArray>()
-
-        return TEA.decrypt(source, impl.delegate.key)
+        return http.get(url).body()
     }
 }
