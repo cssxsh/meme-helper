@@ -5,23 +5,23 @@ import kotlinx.serialization.*
 @Serializable
 public data class DiversionConfig(
     @SerialName("beginTime")
-    val begin: Long,
+    val begin: Long = 0,
     @SerialName("copywriting")
-    val copy: String,
+    val copy: String = "",
     @SerialName("displayImg")
-    val display: String,
+    val display: String = "",
     @SerialName("diversionName")
-    val name: String,
+    val name: String = "",
     @SerialName("diversionType")
-    val type: String,
+    val type: String = "",
     @SerialName("endTime")
-    val end: Long,
+    val end: Long = 0,
     @SerialName("from")
-    val from: String,
+    val from: String = "",
     @SerialName("jumpUrl")
-    val jump: String,
+    val jump: String = "",
     @SerialName("wording")
-    val wording: String,
+    val wording: String = "",
     @SerialName("__v")
     internal val __v: Int = 0,
     @SerialName("cfgID")

@@ -1,21 +1,24 @@
 package xyz.cssxsh.mirai.meme.face
 
 import kotlinx.serialization.*
+import kotlinx.serialization.json.*
 
 @Serializable
 public data class MarketFaceAndroid(
     @SerialName("author")
     val author: String = "",
     @SerialName("childEmojiId")
-    internal val childEmojiId: String = "",
+    internal val childEmojiId: String? = null,
     @SerialName("commDiyText")
-    val commDiyText: List<String> = emptyList(),
+    internal val commDiyText: List<String> = emptyList(),
+    @SerialName("diversionConfig")
+    val diversion: DiversionConfig = DiversionConfig(),
     @SerialName("downloadcount")
     val downloadCount: Int = 0,
     @SerialName("feetype")
-    val feeType: String = "",
+    val feeType: Int = 1,
     @SerialName("filesize")
-    val fileSize: String = "",
+    val fileSize: String = "0",
     @SerialName("id")
     val id: String = "",
     @SerialName("imgs")
@@ -37,9 +40,9 @@ public data class MarketFaceAndroid(
     @SerialName("rights")
     val rights: String = "",
     @SerialName("ringtype")
-    val ringType: String = "",
+    val ringType: String = "0",
     @SerialName("status")
-    val status: String = "",
+    val status: String = "1",
     @SerialName("supportApngSize")
     val supportApngSize: List<Size> = emptyList(),
     @SerialName("supportSize")
@@ -54,7 +57,7 @@ public data class MarketFaceAndroid(
     @Serializable
     public data class Image(
         @SerialName("diyText")
-        val diyText: List<String> = emptyList(),
+        internal val diyText: List<String> = emptyList(),
         @SerialName("id")
         val id: String = "",
         @SerialName("keywords")
@@ -64,9 +67,11 @@ public data class MarketFaceAndroid(
         @SerialName("param")
         val param: String = "",
         @SerialName("wHeightInPhone")
-        val wHeightInPhone: Int = 0,
+        val height: Int = 0,
         @SerialName("wWidthInPhone")
-        val wWidthInPhone: Int = 0
+        val width: Int = 0,
+        @SerialName("voiceData")
+        internal val voice: JsonElement = JsonNull
     )
 
     @Serializable
