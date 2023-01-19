@@ -56,7 +56,7 @@ public object MarketFaceHelper {
             }
         }.bodyAsText()
 
-        val result = Json.decodeFromString(Restful.serializer(), text)
+        val result = json.decodeFromString(Restful.serializer(), text)
 
         check(result.ret == 0) { result.message }
 
@@ -84,7 +84,7 @@ public object MarketFaceHelper {
             }
         }.bodyAsText()
 
-        val result = Json.decodeFromString(Restful.serializer(), text)
+        val result = json.decodeFromString(Restful.serializer(), text)
 
         check(result.ret == 0) { result.message }
         val info = json.decodeFromJsonElement(RelationIdInfo.serializer(), result.data)
@@ -141,7 +141,7 @@ public object MarketFaceHelper {
             }
         }.bodyAsText()
 
-        val result = Json.decodeFromString(Restful.serializer(), text)
+        val result = json.decodeFromString(Restful.serializer(), text)
 
         check(result.ret == 0) { result.message }
         val data = json.decodeFromJsonElement(ItemData.serializer(), result.data)
@@ -200,7 +200,7 @@ public object MarketFaceHelper {
             }
         }.bodyAsText()
 
-        val result = Json.decodeFromString(Restful.serializer(), text)
+        val result = json.decodeFromString(Restful.serializer(), text)
 
         check(result.ret == 0) { result.message }
         val info = json.decodeFromJsonElement(SupplierInfo.serializer(), result.data)
