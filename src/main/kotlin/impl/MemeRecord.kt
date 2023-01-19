@@ -67,7 +67,9 @@ public class MemeRecord : MemeService {
         val record = if (tag.startsWith('#')) {
             FaceRecord.random()
         } else {
-            FaceRecord.match(tag = tag).randomOrNull() ?: return null
+            FaceRecord.match(tag = tag).randomOrNull()
+                ?: MiraiHibernateRecorder.face(md5 = tag)
+                ?: return null
         }
         val message = record.toMessageContent()
         if (message is Image && message.isUploaded(bot).not()) {
