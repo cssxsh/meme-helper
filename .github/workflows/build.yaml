@@ -1,0 +1,33 @@
+name: "build"
+on:
+  push:
+    paths-ignore:
+      - '**/*.md'
+  pull_request:
+    paths-ignore:
+      - '**/*.md'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      - name: chmod -R 777 *
+        run: chmod -R 777 *
+
+      - name: Build Plugin
+        run: ./gradlew buildPlugin
+
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-${{ github.run_id }}
+          path: build/mirai/*

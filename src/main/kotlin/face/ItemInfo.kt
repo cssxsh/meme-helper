@@ -2,6 +2,9 @@ package xyz.cssxsh.mirai.meme.face
 
 import kotlinx.serialization.*
 
+/**
+ * @property appId 1. 表情
+ */
 @Serializable
 public data class ItemInfo(
     @SerialName("appid")

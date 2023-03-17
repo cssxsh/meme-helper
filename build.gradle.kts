@@ -2,12 +2,12 @@ plugins {
     kotlin("jvm") version "1.7.22"
     kotlin("plugin.serialization") version "1.7.22"
 
-    id("net.mamoe.mirai-console") version "2.14.0-RC"
+    id("net.mamoe.mirai-console") version "2.14.0"
     id("me.him188.maven-central-publish") version "1.0.0-dev-3"
 }
 
 group = "xyz.cssxsh"
-version = "1.1.7"
+version = "1.2.0"
 
 repositories {
     mavenLocal()
@@ -28,18 +28,17 @@ mavenCentralPublish {
 dependencies {
     compileOnly("xyz.cssxsh:bilibili-helper:1.6.6")
     compileOnly("xyz.cssxsh:weibo-helper:1.5.8")
-    compileOnly("xyz.cssxsh.mirai:mirai-hibernate-plugin:2.5.2")
-    compileOnly("xyz.cssxsh.mirai:mirai-skia-plugin:1.2.4")
+    compileOnly("xyz.cssxsh.mirai:mirai-hibernate-plugin:2.7.1")
+    compileOnly("xyz.cssxsh.mirai:mirai-skia-plugin:1.3.0")
     testImplementation(kotlin("test"))
-    testImplementation("xyz.cssxsh.mirai:mirai-skia-plugin:1.2.4")
     //
-    implementation(platform("net.mamoe:mirai-bom:2.14.0-RC"))
+    implementation(platform("net.mamoe:mirai-bom:2.14.0"))
     compileOnly("net.mamoe:mirai-core")
     compileOnly("net.mamoe:mirai-core-utils")
     compileOnly("net.mamoe:mirai-console-compiler-common")
     testImplementation("net.mamoe:mirai-core-utils")
     //
-    implementation(platform("io.ktor:ktor-bom:2.2.2"))
+    implementation(platform("io.ktor:ktor-bom:2.2.3"))
     implementation("io.ktor:ktor-client-okhttp")
     implementation("io.ktor:ktor-client-encoding")
     //

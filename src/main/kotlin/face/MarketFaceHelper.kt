@@ -244,7 +244,7 @@ public object MarketFaceHelper {
             val delegate = ImMsgBody.MarketFace(
                 faceName = "[${image.name}]".toByteArray(),
                 itemType = 6,
-                faceInfo = data.feeType.toInt(),
+                faceInfo = data.feeType,
                 faceId = image.id.hexToBytes(),
                 tabId = data.id.toInt(),
                 subType = data.type,
