@@ -1,7 +1,7 @@
 # [Meme Helper](https://github.com/cssxsh/meme-helper)
 
 > 基于 [Mirai Console](https://github.com/mamoe/mirai-console) 的 MEME 生成插件
-> 
+
 [![Release](https://img.shields.io/github/v/release/cssxsh/meme-helper)](https://github.com/cssxsh/meme-helper/releases)
 [![Downloads](https://img.shields.io/github/downloads/cssxsh/meme-helper/total)](https://repo1.maven.org/maven2/xyz/cssxsh/meme-helper/)
 [![MiraiForum](https://img.shields.io/badge/post-on%20MiraiForum-yellow)](https://mirai.mamoe.net/topic/1271)
@@ -119,7 +119,7 @@ Google Emoji Kitchen，两个 emoji 合成 一个
 
 ### 幻影坦克
 
-需要 `mirai-skia-plugin` 版本 `1.1.9+`
+需要 `mirai-skia-plugin` 版本 `>= 1.1.9`
 
 ```
 #tank
@@ -127,6 +127,20 @@ Google Emoji Kitchen，两个 emoji 合成 一个
 [图片]
 ```
 ![tank](example/tank.png)
+
+### 学历
+
+需要 `mirai-skia-plugin` 版本 `>= 1.2.0`
+
+```
+#学历
+专科
+知乎
+知乎大学
+肆业
+2022年6月
+```
+![school](example/school.png)
 
 ## [爱发电](https://afdian.net/@cssxsh)
 
