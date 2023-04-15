@@ -29,6 +29,7 @@ public class MemeWeiboEmoticon : MemeService {
             else -> {}
         }
         loaded = try {
+            @Suppress("INVISIBLE_MEMBER")
             WeiboEmoticonData
             true
         } catch (_: Throwable) {
@@ -46,6 +47,7 @@ public class MemeWeiboEmoticon : MemeService {
     override suspend fun MessageEvent.replier(match: MatchResult): MessageChain? {
         val content = message.content
         val emoticons = buildList {
+            @Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE")
             for ((phrase, emoticon) in WeiboEmoticonData.emoticons) {
                 if (phrase in content || "<${emoticon.category.ifEmpty { "默认" }}>" in content) add(emoticon)
             }

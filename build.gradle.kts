@@ -27,7 +27,7 @@ mavenCentralPublish {
 
 dependencies {
     compileOnly("xyz.cssxsh:bilibili-helper:1.6.6")
-    compileOnly("xyz.cssxsh:weibo-helper:1.5.8")
+    compileOnly("xyz.cssxsh:weibo-helper:1.6.0")
     compileOnly("xyz.cssxsh.mirai:mirai-hibernate-plugin:2.7.1")
     compileOnly("xyz.cssxsh.mirai:mirai-skia-plugin:1.3.0")
     testImplementation(kotlin("test"))
