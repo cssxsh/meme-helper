@@ -33,7 +33,7 @@ public class MemeYgo : MemeService {
             is Regex -> regex = re
             else -> {}
         }
-        loadJob = MemeService.launch {
+        loadJob = MemeService.launch(CoroutineName(name)) {
             folder.mkdirs()
 
             val ygo = folder.resolve("ygo-card-master")

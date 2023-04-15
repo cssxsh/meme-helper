@@ -31,7 +31,7 @@ public class MemeEmojiKitchen : MemeService {
 
     override fun load(folder: File) {
         this.folder = folder
-        loadJob = MemeService.launch {
+        loadJob = MemeService.launch(CoroutineName(name)) {
             folder.mkdirs()
 
             val data = folder.resolve("image_urls.json")

@@ -15,7 +15,7 @@ import java.util.*
 public class MemeSchool : MemeService {
     override val name: String = "学历"
     override val id: String = "school"
-    override val description: String = ""
+    override val description: String = "学历 生成器"
     override val loaded: Boolean = true
     override val properties: Properties = Properties()
     override lateinit var permission: Permission

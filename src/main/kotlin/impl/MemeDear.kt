@@ -28,7 +28,7 @@ public class MemeDear : MemeService {
             is Regex -> regex = re
             else -> {}
         }
-        loadJob = MemeService.launch {
+        loadJob = MemeService.launch(CoroutineName(name)) {
             val dear = folder.resolve("dear.gif")
             if (dear.exists().not()) {
                 download(urlString = "https://tva3.sinaimg.cn/large/003MWcpMly8gv4s019bzsg606o06o40902.gif", folder)

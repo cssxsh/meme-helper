@@ -31,7 +31,7 @@ public class MemePetPet : MemeService {
             is Regex -> regex = re
             else -> {}
         }
-        loadJob = MemeService.launch {
+        loadJob = MemeService.launch(CoroutineName(name)) {
             folder.mkdirs()
 
             val sprite = folder.resolve("sprite.png")

@@ -32,7 +32,7 @@ public class MemeZZKIA : MemeService {
             is Regex -> regex = re
             else -> {}
         }
-        loadJob = MemeService.launch {
+        loadJob = MemeService.launch(CoroutineName(name)) {
             try {
                 @Suppress("INVISIBLE_MEMBER")
                 MiraiSkiaPlugin.loadJob.join()
