@@ -25,7 +25,7 @@ public class MemeEmojiKitchen : MemeService {
     override val regex: Regex = EmojiKitchen.EMOJI_REGEX.toRegex()
     override val properties: Properties = Properties()
     override lateinit var permission: Permission
-    private var kitchen: EmojiKitchen = EmojiKitchen(urls = emptyMap())
+    private var kitchen: EmojiKitchen = EmojiKitchen(items = emptyMap())
     private var folder: File = File(System.getProperty("user.dir", ".")).resolve(".emoji")
     private lateinit var loadJob: Job
 
@@ -34,25 +34,25 @@ public class MemeEmojiKitchen : MemeService {
         loadJob = MemeService.launch(CoroutineName(name)) {
             folder.mkdirs()
 
-            val data = folder.resolve("image_urls.json")
+            val data = folder.resolve("emojiOutput.json")
             if (OffsetDateTime.parse(EmojiKitchen.LAST_UPDATE).toInstant().toEpochMilli() > data.lastModified()) {
                 data.delete()
             }
             if (data.exists().not()) {
                 try {
                     download(
-                        urlString = "https://ghproxy.com/https://github.com/UCYT5040/Google-Sticker-Mashup-Research/raw/main/image_urls.json",
+                        urlString = "https://ghproxy.com/https://github.com/xsalazar/emoji-kitchen/raw/main/scripts/emojiOutput.json",
                         folder = folder
                     )
                 } catch (_: Exception) {
                     data.delete()
                     download(
-                        urlString = "https://raw.githubusercontent.com/UCYT5040/Google-Sticker-Mashup-Research/main/image_urls.json",
+                        urlString = "https://github.com/xsalazar/emoji-kitchen/raw/main/scripts/emojiOutput.json",
                         folder = folder
                     )
                 }.renameTo(data)
             }
-            kitchen = EmojiKitchen(urls = Json.decodeFromString<HashMap<String, String>>(data.readText()))
+            kitchen = EmojiKitchen(items = Json.decodeFromString(data.readText()))
         }
     }
 
