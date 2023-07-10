@@ -36,6 +36,8 @@ public object MarketFaceHelper {
     @PublishedApi
     internal val faces2: MutableMap<Int, MarketFaceAndroid> = WeakHashMap()
     @PublishedApi
+    internal val defaultMobileParam: ByteArray = "72 73 63 54 79 70 65 3f 30 3b 76 61 6c 75 65 3d 30".hexToBytes()
+    @PublishedApi
     internal val defaultPbReserve: ByteArray = "0A 06 08 AC 02 10 AC 02 0A 06 08 C8 01 10 C8 01 40 01".hexToBytes()
 
     public suspend fun queryAuthorDetail(authorId: Long): AuthorDetail {
@@ -220,10 +222,11 @@ public object MarketFaceHelper {
             val delegate = ImMsgBody.MarketFace(
                 faceName = "[$name]".toByteArray(),
                 itemType = 6,
-                faceInfo = info.feeType,
+                faceInfo = 1,
                 faceId = md5.hexToBytes(),
                 tabId = itemId,
-                subType = info.type,
+                subType = 3,
+                mediaType = info.ringType,
                 key = key,
                 imageWidth = 200,
                 imageHeight = 200,
@@ -244,13 +247,15 @@ public object MarketFaceHelper {
             val delegate = ImMsgBody.MarketFace(
                 faceName = "[${image.name}]".toByteArray(),
                 itemType = 6,
-                faceInfo = data.feeType,
+                faceInfo = 1,
                 faceId = image.id.hexToBytes(),
                 tabId = data.id.toInt(),
-                subType = data.type,
+                subType = 3,
+                mediaType = data.ringType.toIntOrNull() ?: 0,
                 key = key,
                 imageWidth = image.width,
                 imageHeight = image.height,
+                mobileParam = if (image.param.isEmpty()) EMPTY_BYTE_ARRAY else defaultMobileParam,
                 pbReserve = defaultPbReserve
             )
 
@@ -271,4 +276,6 @@ public object MarketFaceHelper {
 
         return http.get(url).body()
     }
+
+    public fun detail(face: MarketFace): String = "https://zb.vip.qq.com/hybrid/emoticonmall/detail?id=${face.id}"
 }
