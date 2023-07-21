@@ -8,11 +8,12 @@ import net.mamoe.mirai.console.plugin.*
 import net.mamoe.mirai.console.util.*
 import net.mamoe.mirai.event.*
 
-public object MemeHelperPlugin : KotlinPlugin(
+@PublishedApi
+internal object MemeHelperPlugin : KotlinPlugin(
     JvmPluginDescription(
         id = "xyz.cssxsh.mirai.plugin.meme-helper",
         name = "meme-helper",
-        version = "1.2.1",
+        version = "1.3.0",
     ) {
         author("cssxsh")
         dependsOn("xyz.cssxsh.mirai.plugin.mirai-skia-plugin", ">= 1.1.0", false)
