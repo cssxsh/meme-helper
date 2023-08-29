@@ -4,6 +4,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 
+@PublishedApi
 internal object NumberToBooleanSerializer : KSerializer<Boolean> {
 
     override val descriptor: SerialDescriptor =

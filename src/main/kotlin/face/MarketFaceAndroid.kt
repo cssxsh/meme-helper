@@ -61,6 +61,7 @@ public data class MarketFaceAndroid(
         @SerialName("id")
         val id: String = "",
         @SerialName("keywords")
+        @Serializable(KeywordsSerializer::class)
         val keywords: List<String> = emptyList(),
         @SerialName("name")
         val name: String = "",
