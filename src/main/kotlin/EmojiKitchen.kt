@@ -5,8 +5,10 @@ import net.mamoe.mirai.utils.*
 public data class EmojiKitchen internal constructor(val items: Map<String, List<EmojiKitchenItem>>) {
 
     public fun cook(left: String, right: String): Pair<String, String>? {
-        val list = items[right.unicode()] ?: return null
-        val item = list.find { it.left == left.unicode() } ?: return null
+        val l = left.unicode()
+        val r = right.unicode()
+        val list = items[l] ?: items[r] ?: return null
+        val item = list.find { it.left == l && it.right == r } ?: return null
         return item.filename to item.url
     }
 
@@ -20,7 +22,7 @@ public data class EmojiKitchen internal constructor(val items: Map<String, List<
         }
 
         @PublishedApi
-        internal const val LAST_UPDATE: String = "2023-06-08T08:53:29.000-07:00"
+        internal const val LAST_UPDATE: String = "2023-09-09T17:21:15.000-07:00"
 
         // language=RegExp
         @PublishedApi

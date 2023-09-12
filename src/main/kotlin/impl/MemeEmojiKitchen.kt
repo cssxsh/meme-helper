@@ -68,9 +68,7 @@ public class MemeEmojiKitchen : MemeService {
     override suspend fun MessageEvent.replier(match: MatchResult): Message? {
         val first = match.value
         val second = match.next()?.value ?: return null
-        val (filename, url) = kitchen.cook(first, second)
-            ?: kitchen.cook(second, first)
-            ?: return null
+        val (filename, url) = kitchen.cook(first, second) ?: return null
 
         return (folder.resolve(filename).takeIf { it.exists() } ?: download(urlString = url, folder = folder))
             .uploadAsImage(contact = subject)
