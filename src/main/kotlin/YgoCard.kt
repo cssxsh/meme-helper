@@ -56,7 +56,7 @@ public sealed class YgoCard {
         override var locale: Locale = Locale.getDefault(),
         override var copyright: String? = null
     ) : YgoCard() {
-        override val type: String = ""
+        override val type: String get() = ""
         override fun frame(folder: File): File = folder.resolve("source/mold/frame/monster_xg.jpg")
     }
 
@@ -71,9 +71,9 @@ public sealed class YgoCard {
         override var locale: Locale = Locale.getDefault(),
         override var copyright: String? = null
     ) : YgoCard() {
-        override val race: List<String> = emptyList()
-        override val attribute: Attribute = Attribute.spell
-        override val type: String = "【" + when (locale) {
+        override val race: List<String> get() = emptyList()
+        override val attribute: Attribute get() = Attribute.spell
+        override val type: String get() = "【" + when (locale) {
             Locale.JAPAN -> "魔法卡"
             Locale.ENGLISH -> "魔法卡"
             Locale.SIMPLIFIED_CHINESE -> "魔法卡"
@@ -94,9 +94,9 @@ public sealed class YgoCard {
         override var locale: Locale = Locale.getDefault(),
         override var copyright: String? = null
     ) : YgoCard() {
-        override val race: List<String> = emptyList()
-        override val attribute: Attribute = Attribute.trap
-        override val type: String = "【" + when (locale) {
+        override val race: List<String> get() = emptyList()
+        override val attribute: Attribute get() = Attribute.trap
+        override val type: String get() = "【" + when (locale) {
             Locale.JAPAN -> "陷阱卡"
             Locale.ENGLISH -> "陷阱卡"
             Locale.SIMPLIFIED_CHINESE -> "陷阱卡"
