@@ -12,10 +12,11 @@ import xyz.cssxsh.mirai.meme.service.*
 import java.io.*
 import java.time.*
 import java.util.*
+import java.util.zip.*
 import kotlin.collections.*
 
 /**
- * [Google Sticker Mashup Research](https://github.com/UCYT5040/Google-Sticker-Mashup-Research)
+ * [Emoji Kitchen](https://github.com/xsalazar/emoji-kitchen/)
  */
 public class MemeEmojiKitchen : MemeService {
     override val name: String = "Emoji Kitchen"
@@ -34,25 +35,30 @@ public class MemeEmojiKitchen : MemeService {
         loadJob = MemeService.launch(CoroutineName(name)) {
             folder.mkdirs()
 
-            val data = folder.resolve("emojiOutput.json")
-            if (OffsetDateTime.parse(EmojiKitchen.LAST_UPDATE).toInstant().toEpochMilli() > data.lastModified()) {
-                data.delete()
+            val archive = folder.resolve("emoji-kitchen-main.zip")
+            if (OffsetDateTime.parse(EmojiKitchen.LAST_UPDATE).toInstant().toEpochMilli() > archive.lastModified()) {
+                archive.delete()
             }
-            if (data.exists().not()) {
+            if (archive.exists().not()) {
                 try {
                     download(
-                        urlString = "https://ghproxy.com/https://github.com/xsalazar/emoji-kitchen/raw/main/scripts/emojiOutput.json",
+                        urlString = "https://mirror.ghproxy.com/https://github.com/xsalazar/emoji-kitchen/archive/main.zip",
                         folder = folder
                     )
                 } catch (_: Exception) {
-                    data.delete()
+                    archive.delete()
                     download(
-                        urlString = "https://github.com/xsalazar/emoji-kitchen/raw/main/scripts/emojiOutput.json",
+                        urlString = "https://github.com/xsalazar/emoji-kitchen/archive/main.zip",
                         folder = folder
                     )
-                }.renameTo(data)
+                }.renameTo(archive)
             }
-            kitchen = EmojiKitchen(items = Json.decodeFromString(data.readText()))
+            val metadata = ZipFile(archive).use { zip ->
+                val entry = zip.getEntry("emoji-kitchen-main/src/Components/metadata.json")
+                @OptIn(ExperimentalSerializationApi::class)
+                Json.decodeFromStream<EmojiKitchenMetadata>(stream = zip.getInputStream(entry))
+            }
+            kitchen = EmojiKitchen(items = metadata.data)
         }
     }
 

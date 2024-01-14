@@ -2,14 +2,14 @@ package xyz.cssxsh.mirai.meme
 
 import net.mamoe.mirai.utils.*
 
-public data class EmojiKitchen internal constructor(val items: Map<String, List<EmojiKitchenItem>>) {
+public data class EmojiKitchen internal constructor(val items: Map<String, EmojiKitchenItem>) {
 
     public fun cook(left: String, right: String): Pair<String, String>? {
         val l = left.unicode()
         val r = right.unicode()
         val list = items[l] ?: items[r] ?: return null
-        val item = list.find { it.left == l && it.right == r } ?: return null
-        return item.filename to item.url
+        val item = list.combinations.find { it.leftEmoji == left && it.rightEmoji == right } ?: return null
+        return item.filename to item.gStaticUrl
     }
 
     public companion object {
@@ -22,7 +22,7 @@ public data class EmojiKitchen internal constructor(val items: Map<String, List<
         }
 
         @PublishedApi
-        internal const val LAST_UPDATE: String = "2023-09-09T17:21:15.000-07:00"
+        internal const val LAST_UPDATE: String = "2023-10-02T11:19:09.000-07:00"
 
         // language=RegExp
         @PublishedApi

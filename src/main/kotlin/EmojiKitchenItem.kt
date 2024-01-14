@@ -4,16 +4,20 @@ import kotlinx.serialization.*
 
 @Serializable
 public data class EmojiKitchenItem(
-    @SerialName("leftEmoji")
-    public val left: String,
-    @SerialName("rightEmoji")
-    public val right: String,
-    @SerialName("date")
-    public val date: String
-) {
-    public val filename: String
-        get() =  "u${left.replace("-", "-u")}_u${right.replace("-", "-u")}.png"
-
-    public val url: String
-        get() = "https://www.gstatic.com/android/keyboard/emojikitchen/${date}/u${left.replace("-", "-u")}/${filename}"
-}
+    @SerialName("alt")
+    public val alt: String,
+    @SerialName("emoji")
+    public val emoji: String,
+    @SerialName("emojiCodepoint")
+    public val emojiCodepoint: String,
+    @SerialName("gBoardOrder")
+    public val gBoardOrder: Int,
+    @SerialName("keywords")
+    public val keywords: List<String>,
+    @SerialName("category")
+    public val category: String,
+    @SerialName("subcategory")
+    public val subcategory: String,
+    @SerialName("combinations")
+    public val combinations: List<EmojiKitchenCombination>,
+)
