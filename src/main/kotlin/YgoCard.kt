@@ -29,6 +29,8 @@ public sealed class YgoCard {
 
     public abstract val copyright: String?
 
+    protected abstract fun frame(folder: File): File
+
     @Suppress("EnumEntryName")
     public enum class Attribute {
         dark, divine, earth, fire, light, spell, trap, water, wind;
@@ -49,12 +51,14 @@ public sealed class YgoCard {
         val attack: String = "0",
         val defend: String = "0",
         override val race: List<String>,
-        override var type: String = "",
         override var attribute: Attribute,
         override var color: Int = Color.BLACK,
         override var locale: Locale = Locale.getDefault(),
         override var copyright: String? = null
-    ) : YgoCard()
+    ) : YgoCard() {
+        override val type: String = ""
+        override fun frame(folder: File): File = folder.resolve("source/mold/frame/monster_xg.jpg")
+    }
 
     /**
      * 魔法卡
@@ -63,13 +67,20 @@ public sealed class YgoCard {
         override var name: String,
         override var face: Image,
         override var description: String,
-        override var type: String = "",
         override var color: Int = Color.BLACK,
         override var locale: Locale = Locale.getDefault(),
         override var copyright: String? = null
     ) : YgoCard() {
         override val race: List<String> = emptyList()
         override val attribute: Attribute = Attribute.spell
+        override val type: String = "【" + when (locale) {
+            Locale.JAPAN -> "魔法卡"
+            Locale.ENGLISH -> "魔法卡"
+            Locale.SIMPLIFIED_CHINESE -> "魔法卡"
+            Locale.TRADITIONAL_CHINESE -> "魔法卡"
+            else -> "魔法卡"
+        } + "】"
+        override fun frame(folder: File): File = folder.resolve("source/mold/frame/spell.jpg")
     }
 
     /**
@@ -79,13 +90,21 @@ public sealed class YgoCard {
         override var name: String,
         override var face: Image,
         override var description: String,
-        override var type: String = "",
         override var color: Int = Color.BLACK,
         override var locale: Locale = Locale.getDefault(),
         override var copyright: String? = null
     ) : YgoCard() {
         override val race: List<String> = emptyList()
         override val attribute: Attribute = Attribute.trap
+        override val type: String = "【" + when (locale) {
+            Locale.JAPAN -> "陷阱卡"
+            Locale.ENGLISH -> "陷阱卡"
+            Locale.SIMPLIFIED_CHINESE -> "陷阱卡"
+            Locale.TRADITIONAL_CHINESE -> "陷阱卡"
+            else -> "陷阱卡"
+        } + "】"
+        override fun frame(folder: File): File = folder.resolve("source/mold/frame/trap.jpg")
+
     }
 
     private val fonts = FontCollection()
@@ -109,25 +128,7 @@ public sealed class YgoCard {
             textStyle = TextStyle().setFontSize(48F).setColor(Color.BLACK)
                 .setFontFamilies(arrayOf("YGO-DIY-GB", "YGO-DIY-2-BIG5", "YGODIY-JP", "YGODIY-MatrixBoldSmallCaps"))
         }
-        val text = when (this) {
-            is Monster -> ""
-            is Spell -> "【" + when (locale) {
-                Locale.JAPAN -> "魔法卡"
-                Locale.ENGLISH -> "魔法卡"
-                Locale.SIMPLIFIED_CHINESE -> "魔法卡"
-                Locale.TRADITIONAL_CHINESE -> "魔法卡"
-                else -> "魔法卡"
-            } + "】"
-            is Trap -> "【" + when (locale) {
-                Locale.JAPAN -> "陷阱卡"
-                Locale.ENGLISH -> "陷阱卡"
-                Locale.SIMPLIFIED_CHINESE -> "陷阱卡"
-                Locale.TRADITIONAL_CHINESE -> "陷阱卡"
-                else -> "陷阱卡"
-            } + "】"
-        }
-
-        return ParagraphBuilder(style, fonts).addText(text).build()
+        return ParagraphBuilder(style, fonts).addText(type).build()
     }
 
     private fun race(): Paragraph {
@@ -194,11 +195,7 @@ public sealed class YgoCard {
         val canvas = surface.canvas
 
         // draw frame
-        val frame = when (this) {
-            is Spell -> project.resolve("source/mold/frame/spell.jpg")
-            is Trap -> project.resolve("source/mold/frame/trap.jpg")
-            is Monster -> project.resolve("source/mold/frame/monster_xg.jpg")
-        }
+        val frame = frame(folder = project)
         canvas.drawImage(Image.makeFromEncoded(frame.readBytes()), 0F, 0F)
 
         // draw name
@@ -212,42 +209,35 @@ public sealed class YgoCard {
         type().layout(616F).paint(canvas, 132F, 148F)
 
         // draw Star
-        when (this) {
-            is Monster -> {
-                val star = Image.makeFromEncoded(project.resolve("source/mold/star/level.png").readBytes())
-                repeat(level) { index ->
-                    canvas.drawImageRect(star, Rect.makeXYWH(686F - index * 55, 145F, 50F, 50F))
-                }
+        if (this is Monster) {
+            val star = Image.makeFromEncoded(project.resolve("source/mold/star/level.png").readBytes())
+            repeat(level) { index ->
+                canvas.drawImageRect(star, Rect.makeXYWH(686F - index * 55, 145F, 50F, 50F))
             }
-            is Spell -> Unit
-            is Trap -> Unit
         }
 
         // draw face
         canvas.drawImageRect(face, Rect.makeXYWH(100F, 219F, 614F, 616F))
 
         // draw description
-        when (this) {
-            is Monster -> {
-                race().layout(610F).paint(canvas, 53F, 896F)
-                description().layout(681F).paint(canvas, 66F, 923F)
-            }
-            is Spell, is Trap -> description().layout(681F).paint(canvas, 66F, 896F)
+
+        if (this is Monster) {
+            race().layout(610F).paint(canvas, 53F, 896F)
+            description().layout(681F).paint(canvas, 66F, 923F)
+        } else {
+            description().layout(681F).paint(canvas, 66F, 896F)
         }
 
         // draw ATK/DEF
-        when (this) {
-            is Monster -> {
-                canvas.drawLine(64F, 1079F, 64F + 683, 1079F, Paint().apply {
-                    color = Color.BLACK
-                    strokeWidth = 2F
-                })
-                value("ATK/").layout(100F).paint(canvas, 413F, 1080F)
-                value(attack).layout(100F).paint(canvas, 485F, 1080F)
-                value("DEF/").layout(100F).paint(canvas, 578F, 1080F)
-                value(defend).layout(100F).paint(canvas, 650F, 1080F)
-            }
-            is Spell, is Trap -> Unit
+        if (this is Monster) {
+            canvas.drawLine(64F, 1079F, 64F + 683, 1079F, Paint().apply {
+                color = Color.BLACK
+                strokeWidth = 2F
+            })
+            value("ATK/").layout(100F).paint(canvas, 413F, 1080F)
+            value(attack).layout(100F).paint(canvas, 485F, 1080F)
+            value("DEF/").layout(100F).paint(canvas, 578F, 1080F)
+            value(defend).layout(100F).paint(canvas, 650F, 1080F)
         }
 
         // draw copyright
@@ -257,6 +247,7 @@ public sealed class YgoCard {
     }
 
     public companion object {
-        internal const val SOURCE_KEY = "xyz.cssxsh.skia.ygo"
+        @PublishedApi
+        internal const val SOURCE_KEY: String = "xyz.cssxsh.skia.ygo"
     }
 }
