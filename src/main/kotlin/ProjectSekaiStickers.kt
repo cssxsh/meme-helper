@@ -1,5 +1,6 @@
 package xyz.cssxsh.mirai.meme
 
+import com.itextpdf.io.font.woff2.*
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 import org.jetbrains.skia.*
@@ -9,6 +10,7 @@ import java.io.Closeable
 import java.io.FileNotFoundException
 import java.io.InputStream
 import java.util.zip.ZipFile
+import kotlin.math.*
 
 /**
  * [The Original Ayaka](https://github.com/TheOriginalAyaka/sekai-stickers)
@@ -29,6 +31,12 @@ public class ProjectSekaiStickers private constructor(private val source: ZipFil
     }
 
     private val fonts: FontCollection by lazy {
+        source.getInputStream("sekai-stickers-main/src/fonts/YurukaStd.woff2").use { input ->
+            FontUtils.loadTypeface(Woff2Converter.convert(input.readAllBytes()))
+        }
+        source.getInputStream("sekai-stickers-main/src/fonts/ShangShouFangTangTi.woff2").use { input ->
+            FontUtils.loadTypeface(Woff2Converter.convert(input.readAllBytes()))
+        }
         FontCollection()
             .setDynamicFontManager(FontUtils.provider)
             .setDefaultFontManager(FontMgr.default)
@@ -40,18 +48,36 @@ public class ProjectSekaiStickers private constructor(private val source: ZipFil
         return Image.makeFromEncoded(bytes)
     }
 
-    public fun create(name: String): Image {
+    public fun create(name: String, block: Content.() -> Unit): Image {
         val character = characters.find { it.name == name } ?: throw NoSuchElementException(name)
 
         val surface = Surface.makeRasterN32Premul(296, 256)
         val canvas = surface.canvas
         val image = image(character = character)
-        val content = character.default
+        val content = character.default.apply(block)
 
-        canvas.drawImage(image, 0F, 0F)
-        
-        canvas.translate(-10F,  content.y + 20)
-        canvas.rotate(content.rotate * 10)
+        val hRatio = surface.width.toFloat() / image.width
+        val vRatio = surface.height.toFloat() / image.height
+        val ratio = minOf(hRatio, vRatio)
+        canvas.drawImageRect(
+            image = image,
+            dst = Rect.makeXYWH(
+                l = (surface.width - image.width * ratio) / 2,
+                t = (surface.height - image.height * ratio) / 2,
+                w = image.width * ratio,
+                h = image.height * ratio
+            )
+        )
+
+        val rad = content.rotate / 10
+        val sin = sin(rad)
+        val cos = cos(rad)
+        val m = Matrix33(
+            cos, -sin, content.x - content.x * cos + content.y * sin,
+            sin, cos, content.y - content.y * cos - content.y * sin,
+            0f, 0f, 1f
+        )
+        canvas.concat(m)
 
         val style = ParagraphStyle().apply {
             maxLinesCount = 3
@@ -68,11 +94,11 @@ public class ProjectSekaiStickers private constructor(private val source: ZipFil
                     color = Color.WHITE
                     mode = PaintMode.STROKE
                 })
-                .setFontFamilies(arrayOf("YurukaStd", "SSFangTangTi")))
+                .setFontFamilies(arrayOf("FOT-Yuruka Std UB", "YurukaStd", "SSFangTangTi")))
             .addText(content.text)
             .build()
             .layout(surface.width.toFloat())
-            .paint(canvas, 0F, 0F)
+            .paint(canvas, -6F, 6F)
 
 
         ParagraphBuilder(style, fonts)
@@ -82,11 +108,11 @@ public class ProjectSekaiStickers private constructor(private val source: ZipFil
                     color = character.color.replace("#", "FF").toLong(16).toInt()
                     mode = PaintMode.FILL
                 })
-                .setFontFamilies(arrayOf("YurukaStd", "SSFangTangTi")))
+                .setFontFamilies(arrayOf("FOT-Yuruka Std UB", "YurukaStd", "SSFangTangTi")))
             .addText(content.text)
             .build()
             .layout(surface.width.toFloat())
-            .paint(canvas, 0F, 0F)
+            .paint(canvas, -6F, 6F)
 
         return surface.makeImageSnapshot()
     }
@@ -110,16 +136,16 @@ public class ProjectSekaiStickers private constructor(private val source: ZipFil
     )
 
     @Serializable
-    internal data class Content(
+    public data class Content(
         @SerialName("r")
-        val rotate: Float = 0F,
+        var rotate: Float = 0F,
         @SerialName("s")
-        val size: Float = 0F,
+        var size: Float = 0F,
         @SerialName("text")
-        val text: String = "",
+        var text: String = "",
         @SerialName("x")
-        val x: Float = 0F,
+        var x: Float = 0F,
         @SerialName("y")
-        val y: Float = 0F
+        var y: Float = 0F
     )
 }

@@ -30,6 +30,7 @@ dependencies {
     compileOnly("xyz.cssxsh:weibo-helper:1.6.2")
     compileOnly("xyz.cssxsh.mirai:mirai-hibernate-plugin:2.7.1")
     compileOnly("xyz.cssxsh.mirai:mirai-skia-plugin:1.3.1")
+    implementation("com.itextpdf:io:8.0.2")
     testImplementation(kotlin("test"))
     //
     implementation(platform("net.mamoe:mirai-bom:2.15.0"))
