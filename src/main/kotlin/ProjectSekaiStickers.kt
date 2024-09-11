@@ -7,6 +7,7 @@ import org.jetbrains.skia.*
 import org.jetbrains.skia.paragraph.*
 import xyz.cssxsh.skia.FontUtils
 import java.io.Closeable
+import java.io.File
 import java.io.FileNotFoundException
 import java.io.InputStream
 import java.util.zip.ZipFile
@@ -14,16 +15,17 @@ import kotlin.math.*
 
 /**
  * [The Original Ayaka](https://github.com/TheOriginalAyaka/sekai-stickers)
-*/
+ */
 public class ProjectSekaiStickers private constructor(private val source: ZipFile) : Closeable {
     public constructor(path: String) : this(source = ZipFile(path))
+    public constructor(file: File) : this(source = ZipFile(file))
 
     private fun ZipFile.getInputStream(name: String): InputStream {
         val entry = getEntry(name) ?: throw FileNotFoundException(name)
         return getInputStream(entry)
     }
 
-    private val characters: List<Character> by lazy {
+    internal val characters: List<Character> by lazy {
         source.getInputStream("sekai-stickers-main/src/characters.json").use { input ->
             @OptIn(ExperimentalSerializationApi::class)
             Json.decodeFromStream<List<Character>>(input)
@@ -48,7 +50,7 @@ public class ProjectSekaiStickers private constructor(private val source: ZipFil
         return Image.makeFromEncoded(bytes)
     }
 
-    public fun create(name: String, block: Content.() -> Unit): Image {
+    public fun create(name: String, block: Content.() -> Unit): Surface {
         val character = characters.find { it.name == name } ?: throw NoSuchElementException(name)
 
         val surface = Surface.makeRasterN32Premul(296, 256)
@@ -85,16 +87,18 @@ public class ProjectSekaiStickers private constructor(private val source: ZipFil
         }
 
         ParagraphBuilder(style, fonts)
-            .pushStyle(TextStyle()
-                .setFontSize(content.size)
-                .setForeground(Paint().apply {
-                    strokeCap = PaintStrokeCap.ROUND
-                    strokeJoin = PaintStrokeJoin.ROUND
-                    strokeWidth = 10F
-                    color = Color.WHITE
-                    mode = PaintMode.STROKE
-                })
-                .setFontFamilies(arrayOf("FOT-Yuruka Std UB", "YurukaStd", "SSFangTangTi")))
+            .pushStyle(
+                TextStyle()
+                    .setFontSize(content.size)
+                    .setForeground(Paint().apply {
+                        strokeCap = PaintStrokeCap.ROUND
+                        strokeJoin = PaintStrokeJoin.ROUND
+                        strokeWidth = 10F
+                        color = Color.WHITE
+                        mode = PaintMode.STROKE
+                    })
+                    .setFontFamilies(arrayOf("FOT-Yuruka Std UB", "YurukaStd", "SSFangTangTi"))
+            )
             .addText(content.text)
             .build()
             .layout(surface.width.toFloat())
@@ -102,19 +106,21 @@ public class ProjectSekaiStickers private constructor(private val source: ZipFil
 
 
         ParagraphBuilder(style, fonts)
-            .pushStyle(TextStyle()
-                .setFontSize(content.size)
-                .setForeground(Paint().apply {
-                    color = character.color.replace("#", "FF").toLong(16).toInt()
-                    mode = PaintMode.FILL
-                })
-                .setFontFamilies(arrayOf("FOT-Yuruka Std UB", "YurukaStd", "SSFangTangTi")))
+            .pushStyle(
+                TextStyle()
+                    .setFontSize(content.size)
+                    .setForeground(Paint().apply {
+                        color = character.color.replace("#", "FF").toLong(16).toInt()
+                        mode = PaintMode.FILL
+                    })
+                    .setFontFamilies(arrayOf("FOT-Yuruka Std UB", "YurukaStd", "SSFangTangTi"))
+            )
             .addText(content.text)
             .build()
             .layout(surface.width.toFloat())
             .paint(canvas, -6F, 6F)
 
-        return surface.makeImageSnapshot()
+        return surface
     }
 
     override fun close(): Unit = source.close()
