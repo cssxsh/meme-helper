@@ -142,6 +142,15 @@ Google Emoji Kitchen，两个 emoji 合成 一个
 ```
 ![school](example/school.png)
 
+### sekai-stickers
+
+```
+#Airi 01
+keep up
+```
+
+https://st.ayaka.one/
+
 ## [爱发电](https://afdian.net/@cssxsh)
 
 ![afdian](.github/afdian.jpg)
