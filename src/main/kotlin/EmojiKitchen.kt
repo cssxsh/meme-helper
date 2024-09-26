@@ -7,8 +7,16 @@ public data class EmojiKitchen internal constructor(val items: Map<String, Emoji
     public fun cook(left: String, right: String): Pair<String, String>? {
         val l = left.unicode()
         val r = right.unicode()
-        val list = items[l] ?: items[r] ?: return null
-        val item = list.combinations.find { it.leftEmoji == left && it.rightEmoji == right } ?: return null
+//        val list = items[l] ?: items[r] ?: return null
+//        val item = list.combinations.find { it.leftEmoji == left && it.rightEmoji == right } ?: return null
+
+        val combinationsLists = items[l]?.combinations?.values?.flatten()
+            ?: items[r]?.combinations?.values?.flatten()
+            ?: return null
+
+        val item = combinationsLists.find { it.leftEmoji == left && it.rightEmoji == right }
+            ?: return null
+
         return item.filename to item.gStaticUrl
     }
 
