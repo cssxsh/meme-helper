@@ -18,6 +18,7 @@ public data class EmojiKitchenItem(
     public val category: String,
     @SerialName("subcategory")
     public val subcategory: String,
+    //由于json结构发生变化，序列化需要调整
     @SerialName("combinations")
-    public val combinations: List<EmojiKitchenCombination>,
+    public val combinations: Map<String,List<EmojiKitchenCombination>>,
 )
