@@ -51,7 +51,7 @@ public class MemeZZKIA : MemeService {
             val fzxs14 = folder.resolve("FZXS14-ex.ttf")
             if (fzxs14.exists().not()) {
                 try {
-                    download(urlString = "https://mirror.ghproxy.com/https://raw.githubusercontent.com/dcalsky/bbq/master/fonts/FZXS14-ex.ttf", folder)
+                    download(urlString = "https://raw.githubusercontent.com/dcalsky/bbq/master/fonts/FZXS14-ex.ttf", folder)
                 } catch (_: Exception) {
                     fzxs14.delete()
                     download(urlString = "https://font.taofont.com/en_fonts/fonts/f/FZXS14.ttf", folder)
