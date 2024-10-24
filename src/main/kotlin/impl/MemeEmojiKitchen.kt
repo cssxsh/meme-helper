@@ -42,19 +42,19 @@ public class MemeEmojiKitchen : MemeService {
             if (archive.exists().not()) {
                 try {
                     download(
-                        urlString = "https://mirror.ghproxy.com/https://github.com/xsalazar/emoji-kitchen/archive/main.zip",
+                        urlString = "https://mirror.ghproxy.com/https://github.com/xsalazar/emoji-kitchen-backend/archive/main.zip",
                         folder = folder
                     )
                 } catch (_: Exception) {
                     archive.delete()
                     download(
-                        urlString = "https://github.com/xsalazar/emoji-kitchen/archive/main.zip",
+                        urlString = "https://github.com/xsalazar/emoji-kitchen-backend/archive/main.zip",
                         folder = folder
                     )
                 }.renameTo(archive)
             }
             val metadata = ZipFile(archive).use { zip ->
-                val entry = zip.getEntry("emoji-kitchen-main/src/Components/metadata.json")
+                val entry = zip.getEntry("emoji-kitchen-backend-main/app/metadata.json")
                 @OptIn(ExperimentalSerializationApi::class)
                 Json.decodeFromStream<EmojiKitchenMetadata>(stream = zip.getInputStream(entry))
             }
